@@ -1,25 +1,38 @@
 import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import PostList from './PostList'
+import './css/App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+
+  constructor() {
+    super()
+    this.state = {
+      posts: [
+        {
+          id: 1,
+          title: "斉藤湯",
+          desc: "日暮里",
+        },
+        {
+          id: 2,
+          title: "湯けむりの庄",
+          desc: "宮前平",
+        },
+      ]
+    }
+  }
+
+  render() {
+    return (
+      <div className="app">
+        <h1>銭湯ナビ</h1>
+        <PostList
+          posts={this.state.posts}
+          />
+      </div>
+    );
+  }
 }
 
 export default App;
