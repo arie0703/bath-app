@@ -1,0 +1,17 @@
+form {
+    margin: 0 auto;
+    width: 320px;
+    display: block;
+}
+
+input {
+    margin-bottom: 5px;
+    width: 300px;
+    height: 23px;
+}
+
+textarea {
+    resize: none;
+    width: 300px;
+    height: 150px;
+}
