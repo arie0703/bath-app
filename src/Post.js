@@ -9,7 +9,8 @@ class Post extends Component {
       <li className={className}>
         <span>{this.props.id}</span>
         <span>：{this.props.title}　　</span>
-        <p>{this.props.desc}</p>
+        <p>{this.props.place}</p>
+        <p>{this.props.comment}</p>
       </li>
     );
   }
