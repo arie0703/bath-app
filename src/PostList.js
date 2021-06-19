@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Post from './Post';
 
 
+
 class PostList extends Component {
 
   render() {
@@ -9,6 +10,7 @@ class PostList extends Component {
       <Post
         key={post.id}
         {...post}
+        comments = {this.comments}
       />
     )
 
