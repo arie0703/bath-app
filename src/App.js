@@ -1,8 +1,6 @@
-import logo from './logo.svg';
 import React, { Component } from 'react';
 import PostList from './PostList'
 import Form from './Form';
-import CommentForm from './CommentForm';
 import './css/App.css';
 
 class App extends Component {
@@ -12,8 +10,8 @@ class App extends Component {
     const posts = [
       {
         id: 1,
-        title: "斉藤湯",
-        place: "日暮里",
+        title: "ご飯",
+        content: "明日の晩御飯はキムチ納豆丼",
         comment: [{ //コメントは配列にしておく
           id: 1,
           comment: "yeah",
@@ -22,35 +20,19 @@ class App extends Component {
       },
       {
         id: 2,
-        title: "湯けむりの庄",
-        place: "宮前平",
+        title: "未来",
+        content: "将来はアメリカに住もうかな〜",
         comment: [{
           id: 2,
-          comment: "宮前平から近い。",
+          comment: "そんな気分じゃない",
           post_id: 2,
         }],
       },
     ]
 
-    //コメントテーブルはなくてもよさそう？
-    const comments = [
-      {
-        id: 1,
-        post_id: 1,
-        comment: "yeah"
-      },
-      {
-        id: 2,
-        post_id: 2,
-        comment: "yeah"
-      },
-    ]
-
     this.state = {
       posts: posts,
-      comments: comments,
       countPost: posts.length + 1,
-      countComment: comments.length + 1
     }
     
   }
@@ -59,14 +41,14 @@ class App extends Component {
   handleSubmit(e) {
     e.preventDefault();
     const title = e.target.title.value;
-    const place = e.target.place.value;
+    const content = e.target.content.value;
     const posts = this.state.posts.slice()
     const countPost = this.state.countPost
 
     posts.push({
       id: countPost,
       title: title,
-      place: place,
+      content: content,
       comment: []
     });
 
@@ -74,7 +56,7 @@ class App extends Component {
     this.setState({ countPost: countPost + 1 })
 
     e.target.title.value = '';
-    e.target.place.value = '';
+    e.target.content.value = '';
     console.log(posts[0].comment)
   }
 
@@ -84,13 +66,7 @@ class App extends Component {
     const post_id = Number(e.target.post_id.value);
     const comment = e.target.comment.value;
     const posts = this.state.posts.slice()
-    const comments = this.state.comments.slice()
-    
-    comments.push({
-      id: countComment,
-      comment: comment,
-      post_id: post_id
-    })
+  
     posts[post_id - 1].comment.push({
       id: countComment,
       comment: comment,
@@ -98,25 +74,20 @@ class App extends Component {
     })
 
     this.setState({ posts })
-    this.setState({ comments })
     this.setState({ countComment: countComment + 1 })
     e.target.comment.value = '';
-    e.target.post_id.value = '';
-    console.log(comments)
     console.log(posts)
   }
 
   render() {
     return (
       <div className="app">
-        <h1>銭湯ナビ</h1>
+        <h1>独り言メモ</h1>
         <Form handleSubmit={this.handleSubmit.bind(this)} />
         <PostList
           posts={this.state.posts}
-          comments = {this.state.comments}
+          submitComment={this.submitComment.bind(this)}
           />
-        <CommentForm 
-          submitComment={this.submitComment.bind(this)}/>
       </div>
     );
   }

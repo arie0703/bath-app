@@ -10,12 +10,12 @@ class PostList extends Component {
       <Post
         key={post.id}
         {...post}
-        comments = {this.comments}
+        submitComment={this.props.submitComment.bind(this)}
       />
     )
 
     return(
-      <ul>
+      <ul class="post_list">
         {posts}
       </ul>
     );
