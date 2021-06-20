@@ -1,0 +1,8 @@
+.commentform button {
+    height: 29px;
+    margin-left: 5px;
+}
+
+.commentform form {
+    display: flex;
+}

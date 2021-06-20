@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
+import './css/commentform.css';
 
 class CommentForm extends Component {
+    
     render() {
+      let a = "aa";
       return (
         <div className="commentform">
           <form onSubmit={this.props.submitComment}>
-            <input name="post_id" placeholder="post_id" defaultValue=""></input>
-            <textarea name="comment" placeholder="コメント" defaultValue=""></textarea><br/>
-            <button type="submit">コメントを投稿</button>
+            <input type="hidden" name="post_id" placeholder="post_id" defaultValue={this.props.pid}></input>
+            <input name="comment" placeholder="コメント" defaultValue=""></input><br/>
+            <button type="submit">コメント</button>
           </form>
         </div>
       )

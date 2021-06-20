@@ -22,13 +22,13 @@ code {
   text-align: center;
 }
 
-.app ul {
+.app ul.post_list {
   margin-top: 10px;
-  display: flex;
   list-style: none;
+  width: 100%;
 }
 
-.app li {
+.app li.post {
   padding: 30px;
   margin: 10px;
   background-color: #fff;
