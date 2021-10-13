@@ -4,7 +4,6 @@ import './css/commentform.css';
 class CommentForm extends Component {
     
     render() {
-      let a = "aa";
       return (
         <div className="commentform">
           <form onSubmit={this.props.submitComment}>

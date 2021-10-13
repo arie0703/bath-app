@@ -2,33 +2,13 @@ import React, { Component } from 'react';
 import PostList from './PostList'
 import Form from './Form';
 import './css/App.css';
+import firebase, { db } from './firebase';
 
 class App extends Component {
 
   constructor() {
     super()
-    const posts = [
-      {
-        id: 1,
-        title: "ご飯",
-        content: "明日の晩御飯はキムチ納豆丼",
-        comment: [{ //コメントは配列にしておく
-          id: 1,
-          comment: "yeah",
-          post_id: 1,
-        }],
-      },
-      {
-        id: 2,
-        title: "未来",
-        content: "将来はアメリカに住もうかな〜",
-        comment: [{
-          id: 2,
-          comment: "そんな気分じゃない",
-          post_id: 2,
-        }],
-      },
-    ]
+    const posts = []
 
     this.state = {
       posts: posts,
@@ -38,51 +18,57 @@ class App extends Component {
   }
 
   // 投稿時の処理
-  handleSubmit(e) {
-    e.preventDefault();
-    const title = e.target.title.value;
-    const content = e.target.content.value;
-    const posts = this.state.posts.slice()
-    const countPost = this.state.countPost
-
-    posts.push({
-      id: countPost,
-      title: title,
-      content: content,
-      comment: []
+  handleSubmit(values) {
+    values.preventDefault();
+    const docId = db.collection("posts").doc().id;
+    db.collection("posts").doc(docId).set({
+        title: values.target.title.value,
+        content: values.target.content.value,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     });
-
-    this.setState({ posts })
-    this.setState({ countPost: countPost + 1 })
-
-    e.target.title.value = '';
-    e.target.content.value = '';
-    console.log(posts[0].comment)
   }
 
-  submitComment(e) {
-    e.preventDefault();
-    const countComment = this.state.countComment
-    const post_id = Number(e.target.post_id.value);
-    const comment = e.target.comment.value;
-    const posts = this.state.posts.slice()
-  
-    posts[post_id - 1].comment.push({
-      id: countComment,
-      comment: comment,
-      post_id: post_id
-    })
+  getData = async () =>{
+    
+    const ref = db.collection("posts").orderBy('createdAt');
+    const snapshots = await ref.get();
+    const docs = snapshots.docs.map(doc => doc.data());
 
-    this.setState({ posts })
-    this.setState({ countComment: countComment + 1 })
-    e.target.comment.value = '';
-    console.log(posts)
+    await this.setState({
+      posts: docs,
+    });
+
+  }
+
+  onCollectionUpdate = (querySnapshot) => {
+    //変更の発生源を特定 local:自分, server:他人
+    // const source = querySnapshot.metadata.hasPendingWrites ? "local" : "server";
+    // if (source === 'local')  this.getData(); //期待した動きをしない
+    this.getData();
+  }
+
+  componentDidMount = async () => {
+    //mount時に読み込む
+    await this.getData();
+    //collectionの更新を監視
+    this.unsubscribe = db.collection("posts").onSnapshot(this.onCollectionUpdate);
+  }
+
+  submitComment(values) {
+    const docId = db.collection("posts").doc().id;
+    db.collection("posts").doc(docId).set({
+        id: firebase.firestore.FieldValue.increment(),
+        title: values.title,
+        content: values.content,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    });
   }
 
   render() {
     return (
       <div className="app">
-        <h1>独り言メモ</h1>
+        <h1>Nikki Hub</h1>
+        <button onClick={this.getData}>get</button>
         <Form handleSubmit={this.handleSubmit.bind(this)} />
         <PostList
           posts={this.state.posts}

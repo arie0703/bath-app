@@ -21,12 +21,11 @@ class Post extends Component {
     
     return(
       <li className={className}>
-        <span>{this.props.id}</span>
-        <span>：{this.props.title}　　</span>
+        <span>{this.props.title}　　</span>
         <p>{this.props.content}</p>
         {data}
         <CommentForm
-          pid = {this.props.id}
+          pid={this.props.id}
           submitComment={this.props.submitComment.bind(this)}/>
       </li>
 
