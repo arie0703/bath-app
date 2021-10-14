@@ -5,12 +5,15 @@ import Post from './Post';
 
 class PostList extends Component {
 
+  let 
+
   render() {
     const posts = this.props.posts.map( post =>
       <Post
         key={post.id}
         {...post}
-        submitComment={this.props.submitComment.bind(this)}
+        number={this.props.posts.length - (this.props.posts.indexOf(post))}
+        createdAt={post.createdAt.toDate().toLocaleString('ja-JP')}
       />
     )
 

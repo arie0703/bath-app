@@ -1,32 +1,29 @@
 import React, { Component } from 'react';
 import './css/index.css';
-import CommentForm from './CommentForm';
+import {db} from './firebase'
 
 class Post extends Component {
+
+  deletePost(docId) {
+    db.collection("posts").doc(docId).delete().then(() => {
+      console.log("Document successfully deleted!");
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+    });
+  }
   
   render() {
-    // const comments = this.props.comments.map( comment =>
-    //   <Comment
-    //     key={comment.id}
-    //     {...comment}
-    //   />
-    // )
     const className = 'post'
-    var data = []
-    
-    //各投稿のコメントの要素数だけ、コメントをdataに収納しreturnする
-    for(var i in this.props.comment) {
-      data.push(<p class="comment">・{this.props.comment[i].comment}</p>)
-    }
     
     return(
       <li className={className}>
-        <span>{this.props.title}　　</span>
+        <span>{this.props.number}: {this.props.title} 
+          
+        </span>
+        <button onClick={() => this.deletePost(this.props.id)}>Delete</button>
         <p>{this.props.content}</p>
-        {data}
-        <CommentForm
-          pid={this.props.id}
-          submitComment={this.props.submitComment.bind(this)}/>
+        <p>{this.props.createdAt}</p>
+        
       </li>
 
       
