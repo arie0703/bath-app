@@ -12,7 +12,6 @@ class App extends Component {
 
     this.state = {
       posts: posts,
-      countPost: posts.length + 1,
     }
     
   }
@@ -22,15 +21,16 @@ class App extends Component {
     values.preventDefault();
     const docId = db.collection("posts").doc().id;
     db.collection("posts").doc(docId).set({
+        id: docId,
         title: values.target.title.value,
         content: values.target.content.value,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdAt: firebase.firestore.Timestamp.now()
     });
   }
 
   getData = async () =>{
     
-    const ref = db.collection("posts").orderBy('createdAt');
+    const ref = db.collection("posts").orderBy('createdAt', 'desc');
     const snapshots = await ref.get();
     const docs = snapshots.docs.map(doc => doc.data());
 
@@ -54,25 +54,18 @@ class App extends Component {
     this.unsubscribe = db.collection("posts").onSnapshot(this.onCollectionUpdate);
   }
 
-  submitComment(values) {
-    const docId = db.collection("posts").doc().id;
-    db.collection("posts").doc(docId).set({
-        id: firebase.firestore.FieldValue.increment(),
-        title: values.title,
-        content: values.content,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+  componentWillUnmount = () => {
+    this.unsubscribe();
   }
+
 
   render() {
     return (
       <div className="app">
         <h1>Nikki Hub</h1>
-        <button onClick={this.getData}>get</button>
         <Form handleSubmit={this.handleSubmit.bind(this)} />
         <PostList
           posts={this.state.posts}
-          submitComment={this.submitComment.bind(this)}
           />
       </div>
     );
