@@ -14,4 +14,9 @@ textarea {
     resize: none;
     width: 300px;
     height: 150px;
+    border-color: #fff;
+}
+
+fieldset {
+    border-color: rgba(50, 50, 50, 0.5) !important;
 }

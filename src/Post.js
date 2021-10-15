@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import './css/index.css';
 import {db} from './firebase'
+import IconButton from '@mui/material/IconButton';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import { red } from '@mui/material/colors';
 
 class Post extends Component {
 
@@ -20,7 +23,15 @@ class Post extends Component {
         <span>{this.props.number}: {this.props.title} 
           
         </span>
-        <button onClick={() => this.deletePost(this.props.id)}>Delete</button>
+        <IconButton 
+          aria-label="delete" 
+          size="small"
+          sx={{
+            margin: 0.4,
+          }}
+        >
+          <DeleteOutlinedIcon sx={{ color: red[400] }} />
+        </IconButton>
         <p>{this.props.content}</p>
         <p>{this.props.createdAt}</p>
         
