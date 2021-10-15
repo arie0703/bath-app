@@ -5,7 +5,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #efefef;
+  background-color: #282c34;
+  min-height: 100vh;
+  font-size: calc(4px + 2vmin);
+  color: white;
 }
 
 code {
@@ -31,5 +34,5 @@ code {
 .app li.post {
   padding: 30px;
   margin: 10px;
-  background-color: #fff;
+  background-color: rgba(30,30,30,0.3);
 }

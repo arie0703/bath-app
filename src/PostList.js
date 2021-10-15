@@ -5,8 +5,6 @@ import Post from './Post';
 
 class PostList extends Component {
 
-  let 
-
   render() {
     const posts = this.props.posts.map( post =>
       <Post
