@@ -29,6 +29,7 @@ class Post extends Component {
           sx={{
             margin: 0.4,
           }}
+          onClick={() => {this.deletePost(this.props.id)}}
         >
           <DeleteOutlinedIcon sx={{ color: red[400] }} />
         </IconButton>
