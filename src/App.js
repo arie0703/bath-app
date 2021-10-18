@@ -4,6 +4,7 @@ import Form from './Form';
 import './css/App.css';
 import CalendarHeatmap from "react-calendar-heatmap";
 import firebase, { db } from './firebase';
+import ReactTooltip from "react-tooltip";
 
 class App extends Component {
 
@@ -64,7 +65,9 @@ class App extends Component {
     
       arr.push({date: settedDate, count: count})
     });
-    this.state.dates = arr;
+    this.setState({
+      dates: arr
+    })
   }
 
   
@@ -93,7 +96,6 @@ class App extends Component {
       <div className="app">
         <h1>Nikki Hub</h1>
         <Form handleSubmit={this.handleSubmit.bind(this)} />
-
         <CalendarHeatmap
           // 表示させる月
           startDate={new Date("2021-01-01")}
@@ -105,10 +107,31 @@ class App extends Component {
           classForValue={(value) => {
             if (!value) {
               return "color-empty";
+            } else if (value.count > 4) {
+              return "color-scale-4"
             }
             return `color-scale-${value.count}`;
           }}
+          tooltipDataAttrs={(value) => {
+            
+            // react-tooltipの構成
+            if (!value.date) {
+              return {
+                "data-tip": `no contribution`,
+              };
+            } else {
+              return {
+                "data-tip": `${value.date} has count: ${
+                  value.count
+                }`,
+              };
+            }
+          }}
+          
         />
+          
+        <ReactTooltip effect='solid'/>
+        
         <PostList
           posts={this.state.posts}
           />

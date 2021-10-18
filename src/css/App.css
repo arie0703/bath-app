@@ -28,6 +28,10 @@
   color: #61dafb;
 }
 
+rect:focus {
+  outline: none;
+}
+
 .react-calendar-heatmap-month-label {
   fill: #fff;
 }
