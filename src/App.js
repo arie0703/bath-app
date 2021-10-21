@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PostList from './PostList'
 import Form from './Form';
+import SignUp from './user/SignUp'
 import './css/App.css';
 import CalendarHeatmap from "react-calendar-heatmap";
 import firebase, { db } from './firebase';
@@ -95,6 +96,8 @@ class App extends Component {
     return (
       <div className="app">
         <h1>Nikki Hub</h1>
+        <SignUp/>
+        
         <Form handleSubmit={this.handleSubmit.bind(this)} />
         <CalendarHeatmap
           // 表示させる月
