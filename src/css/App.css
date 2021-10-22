@@ -28,23 +28,26 @@
   color: #61dafb;
 }
 
-rect:focus {
-  outline: none;
+.nav-bar {
+  display: flex;
+  justify-content: center;
 }
 
-.react-calendar-heatmap-month-label {
-  fill: #fff;
-}
-.react-calendar-heatmap {
-  fill: #282c34;
-  width: 600px;
+.nav-bar a, .nav-bar p {
+  color: white;
+  text-decoration: none;
   display: block;
-  margin: 30px auto;
+  margin: 10px;
 }
-.react-calendar-heatmap .color-scale-1 { fill: #d6e685; }
-.react-calendar-heatmap .color-scale-2 { fill: #8cc665; }
-.react-calendar-heatmap .color-scale-3 { fill: #44a340; }
-.react-calendar-heatmap .color-scale-4 { fill: #1e6823; }
+
+.nav-bar a:hover, .nav-bar p:hover {
+  color: #999;
+}
+
+.nav-bar p:hover {
+  cursor: pointer
+}
+
 
 @keyframes App-logo-spin {
   from {

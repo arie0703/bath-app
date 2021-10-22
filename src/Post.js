@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './css/index.css';
+import './css/Post.css';
 import {db} from './firebase'
 import IconButton from '@mui/material/IconButton';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
