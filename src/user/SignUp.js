@@ -15,11 +15,11 @@ class SignUp extends Component {
   };
 
 
+
   render() {
     return (
       <div className="signup">
 
-        <h2>SignUp</h2>
         <form onSubmit={this.handleSubmit} class="post_form">
           <TextField
             name="email" 

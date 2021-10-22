@@ -1,0 +1,29 @@
+.app ul.post_list {
+  margin-top: 10px;
+  list-style: none;
+  width: 100%;
+}
+
+.app li.post {
+  padding: 30px;
+  margin: 10px;
+  background-color: rgba(30,30,30,0.3);
+}
+
+rect:focus {
+  outline: none;
+}   
+
+.react-calendar-heatmap-month-label {
+   fill: #fff;
+}
+.react-calendar-heatmap {
+  fill: #282c34;
+  width: 600px;
+  display: block;
+  margin: 30px auto;
+}
+.react-calendar-heatmap .color-scale-1 { fill: #d6e685; }
+.react-calendar-heatmap .color-scale-2 { fill: #8cc665; }
+.react-calendar-heatmap .color-scale-3 { fill: #44a340; }
+.react-calendar-heatmap .color-scale-4 { fill: #1e6823; }
