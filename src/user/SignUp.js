@@ -1,13 +1,17 @@
-import React, { Component } from 'react'
+import React  from 'react'
 import '../css/form.css';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { auth } from '../firebase';
+import { useAuthContext } from '../AuthContext';
+import { Redirect } from 'react-router-dom';
 
-class SignUp extends Component {
+const SignUp = () => {
 
 
-  handleSubmit = (event) => {
+  const { user } = useAuthContext();
+
+  const handleSubmit = (event) => {
     event.preventDefault();
     const { email, password } = event.target.elements;
     console.log(email.value, password.value);
@@ -16,11 +20,13 @@ class SignUp extends Component {
 
 
 
-  render() {
+  if (user) {
+    return <Redirect to="/mypost" />;
+  } else {
     return (
       <div className="signup">
 
-        <form onSubmit={this.handleSubmit} class="post_form">
+        <form onSubmit={handleSubmit} class="post_form">
           <TextField
             name="email" 
             InputProps={{
@@ -57,6 +63,7 @@ class SignUp extends Component {
       </div>
     )
   }
+  
 }
 
 
