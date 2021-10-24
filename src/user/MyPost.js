@@ -3,7 +3,7 @@ import PostList from '../PostList'
 import Form from '../Form';
 import '../css/Post.css';
 import CalendarHeatmap from "react-calendar-heatmap";
-import firebase, { db } from '../firebase';
+import firebase, { auth, db } from '../firebase';
 import ReactTooltip from "react-tooltip";
 
 class MyPost extends Component {
@@ -28,6 +28,7 @@ class MyPost extends Component {
         id: docId,
         title: values.target.title.value,
         content: values.target.content.value,
+        userId: auth.currentUser.uid,
         createdAt: firebase.firestore.Timestamp.now()
     });
   }
@@ -35,7 +36,7 @@ class MyPost extends Component {
 
   getData = async () =>{
     
-    const ref = db.collection("posts").orderBy('createdAt', 'desc');
+    const ref = db.collection("posts").where('userId', '==', auth.currentUser.uid).orderBy('createdAt', 'desc');
     const snapshots = await ref.get();
     const docs = snapshots.docs.map(doc => doc.data());
     this.setHeatMap(docs);
