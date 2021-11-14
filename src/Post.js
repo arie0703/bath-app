@@ -8,7 +8,7 @@ import { red } from '@mui/material/colors';
 class Post extends Component {
 
   deletePost(docId) {
-    db.collection("posts").doc(docId).delete().then(() => {
+    db.collection("meals").doc(docId).delete().then(() => {
       console.log("Document successfully deleted!");
     }).catch((error) => {
         console.error("Error removing document: ", error);
@@ -33,8 +33,11 @@ class Post extends Component {
         >
           <DeleteOutlinedIcon sx={{ color: red[400] }} />
         </IconButton>
-        <p>{this.props.content}</p>
-        <p>{this.props.createdAt}</p>
+        <p>{this.props.description}</p>
+        <p>手軽度: {this.props.ease_score}</p>
+        <p>ヘルシー度: {this.props.health_score}</p>
+        <p>コスパ: {this.props.cost_score}</p>
+        <p>{this.props.created_at}</p>
         
       </li>
 

@@ -23,20 +23,24 @@ class MyPost extends Component {
   // 投稿時の処理
   handleSubmit(values) {
     values.preventDefault();
-    const docId = db.collection("posts").doc().id;
-    db.collection("posts").doc(docId).set({
+    const docId = db.collection("meals").doc().id;
+    db.collection("meals").doc(docId).set({
         id: docId,
         title: values.target.title.value,
-        content: values.target.content.value,
-        userId: auth.currentUser.uid,
-        createdAt: firebase.firestore.Timestamp.now()
+        description: values.target.description.value,
+        health_score: Number(values.target.health_score.value),
+        ease_score: Number(values.target.ease_score.value),
+        cost_score: Number(values.target.cost_score.value),
+        ingredients: [], // 次回実装
+        user_id: auth.currentUser.uid,
+        created_at: firebase.firestore.Timestamp.now()
     });
   }
 
 
   getData = async () =>{
     
-    const ref = db.collection("posts").where('userId', '==', auth.currentUser.uid).orderBy('createdAt', 'desc');
+    const ref = db.collection("meals").where('user_id', '==', auth.currentUser.uid).orderBy('created_at', 'desc');
     const snapshots = await ref.get();
     const docs = snapshots.docs.map(doc => doc.data());
     this.setHeatMap(docs);
@@ -51,7 +55,7 @@ class MyPost extends Component {
     var pre = "";
     var count = 1
     docs.forEach(function(doc) {
-      var date = doc.createdAt.toDate();
+      var date = doc.created_at.toDate();
 
       var y = date.getFullYear();
       var m = ('00' + (date.getMonth()+1)).slice(-2);
@@ -84,7 +88,7 @@ class MyPost extends Component {
     //mount時に読み込む
     await this.getData();
     //collectionの更新を監視
-    this.unsubscribe = db.collection("posts").onSnapshot(this.onCollectionUpdate);
+    this.unsubscribe = db.collection("meals").onSnapshot(this.onCollectionUpdate);
   }
 
   componentWillUnmount = () => {
