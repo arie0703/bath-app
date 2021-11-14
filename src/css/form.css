@@ -17,6 +17,12 @@ textarea {
     border-color: #fff;
 }
 
+/* importantはダークモードが適切に実装できたら消す */
+
 fieldset {
     border-color: rgba(50, 50, 50, 0.5) !important;
+}
+
+.css-1c99szj-MuiRating-icon { 
+    color: rgb(70, 70, 70) !important;
 }

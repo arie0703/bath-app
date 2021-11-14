@@ -11,7 +11,7 @@ class PostList extends Component {
         key={post.id}
         {...post}
         number={this.props.posts.length - (this.props.posts.indexOf(post))}
-        createdAt={post.createdAt.toDate().toLocaleString('ja-JP')}
+        created_at={post.created_at.toDate().toLocaleString('ja-JP')}
       />
     )
 
