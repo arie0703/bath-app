@@ -38,6 +38,7 @@ class Post extends Component {
         <p>ヘルシー度: {this.props.health_score}</p>
         <p>コスパ: {this.props.cost_score}</p>
         <p>{this.props.created_at}</p>
+        <p><img src={this.props.image_url}></img></p>
         
       </li>
 

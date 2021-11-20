@@ -17,6 +17,12 @@ textarea {
     border-color: #fff;
 }
 
+.image_uploader img {
+    object-fit: cover;
+    max-width: 300px;
+    max-height: 300px;
+}
+
 /* importantはダークモードが適切に実装できたら消す */
 
 fieldset {

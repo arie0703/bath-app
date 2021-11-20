@@ -3,7 +3,7 @@ import PostList from '../PostList'
 import Form from '../Form';
 import '../css/Post.css';
 import CalendarHeatmap from "react-calendar-heatmap";
-import firebase, { auth, db } from '../firebase';
+import { auth, db } from '../firebase';
 import ReactTooltip from "react-tooltip";
 
 class MyPost extends Component {
@@ -20,22 +20,6 @@ class MyPost extends Component {
     
   }
 
-  // 投稿時の処理
-  handleSubmit(values) {
-    values.preventDefault();
-    const docId = db.collection("meals").doc().id;
-    db.collection("meals").doc(docId).set({
-        id: docId,
-        title: values.target.title.value,
-        description: values.target.description.value,
-        health_score: Number(values.target.health_score.value),
-        ease_score: Number(values.target.ease_score.value),
-        cost_score: Number(values.target.cost_score.value),
-        ingredients: [], // 次回実装
-        user_id: auth.currentUser.uid,
-        created_at: firebase.firestore.Timestamp.now()
-    });
-  }
 
 
   getData = async () =>{
@@ -100,7 +84,7 @@ class MyPost extends Component {
     return (
       <div className="mypost">
         
-        <Form handleSubmit={this.handleSubmit.bind(this)} />
+        <Form/>
         <CalendarHeatmap
           // 表示させる月
           startDate={new Date("2021-01-01")}
