@@ -18,33 +18,16 @@ class Form extends Component {
       health_score: 1,
       cost_score: 1,
       ease_score: 1,
-      image_url: null,
+      values: [],
     }
     
   }
 
-  upload() {
-    console.log(uploadedImage)
-    if (uploadedImage.length !== null) {
-      this.imageUpload()
-    } else {
-      console.log("nullです")
-    }
-    
-  }
-
-  next = (snapshot: { bytesTransferred: number; totalBytes: number }) => {
+  next = (snapshot) => {
     // 進行中のsnapshotを得る
     // アップロードの進行度を表示
     const percent = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     console.log(percent + "% done");
-    console.log(snapshot.ref.getDownloadURL())
-    snapshot.ref.getDownloadURL().then((url) => {
-        console.log(url);
-        this.setState({
-          image_url: url
-        })
-    });
   };
 
   error = (error) => {
@@ -53,13 +36,19 @@ class Form extends Component {
 
   handleSubmit = (values) => {
     values.preventDefault();
-
-    // if (uploadedImage.length !== null) {
-    //   this.imageUpload()
-    // }
-
-    console.log(this.state.image_url)
-
+    
+    if (uploadedImage.length !== null) {
+      this.setState({
+        values: values
+      })
+      this.imageUpload()
+      
+    } else {
+      this.post(values, null)
+    }
+  }
+  
+  post = (values, image_url) => {
     const docId = db.collection("meals").doc().id;
     db.collection("meals").doc(docId).set({
         id: docId,
@@ -70,7 +59,7 @@ class Form extends Component {
         cost_score: Number(values.target.cost_score.value),
         ingredients: [], // 次回実装
         user_id: auth.currentUser.uid,
-        image_url: this.state.image_url,
+        image_url: image_url,
         created_at: firebase.firestore.Timestamp.now()
     });
   }
@@ -81,12 +70,29 @@ class Form extends Component {
       const uploadTask = storage
         .ref(`/images/${uploadedImage.name}`)
         .put(uploadedImage);
+        uploadTask.on(
+          firebase.storage.TaskEvent.STATE_CHANGED, 
+          this.next, // upload進行中の関数
+          this.error, // error発生時に呼び起こす関数
+          function () { // upload終了時に呼び出す関数
+            uploadTask.snapshot.ref.getDownloadURL().then((url) => {
+              console.log(url)
+              this.post(this.state.values, url)
+            })
 
-        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, this.next, this.error);
+
+            
+          }.bind(this)
+        );
+
+        
       
     } catch (error) {
       console.log("エラーキャッチ", error);
     }
+
+    
+
     
   };
 
@@ -176,11 +182,6 @@ class Form extends Component {
             variant="contained"
           >
             POST
-          </Button>
-          <Button
-            onClick={() => this.upload()}
-          >
-            Image Upload
           </Button>
         
         </form>
