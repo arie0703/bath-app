@@ -7,7 +7,7 @@ import { useDropzone } from "react-dropzone";
 import {uploadedImage, setImage} from './UploadedImage';
 
 
-const ImageUploader: React.FC = () => {
+const ImageUploader = () => {
   const [myFiles, setMyFiles] = useState([]);
   const [clickable, setClickable] = useState(false);
   const [src, setSrc] = useState("");

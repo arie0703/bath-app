@@ -16,6 +16,10 @@ img {
   max-height: 200px;
 }
 
+.flex {
+  display: flex;
+}
+
 rect:focus {
   outline: none;
 }   
