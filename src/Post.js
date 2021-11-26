@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import './css/Post.css';
 import {db} from './firebase'
 import IconButton from '@mui/material/IconButton';
+import Card from '@mui/material/Card';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { red } from '@mui/material/colors';
 import {
@@ -23,20 +30,19 @@ class Post extends Component {
   render() {
     const className = 'post'
 
-    const data = [
-      {item: 'おてがるさ', value: this.props.ease_score},
-      {item: 'ヘルシー', value: this.props.health_score},
-      {item: 'コスパ', value: this.props.cost_score}
-    ]
-
     let image_url = this.props.image_url
     if (!this.props.image_url) {
       image_url = NoImageIcon
     }
     
     return(
-      <li className={className}>
+      <Card 
+        className={className}
+        sx={{width: "500px"}}
+        style={{backgroundColor: '#222', color: "#eee", padding: "10px", margin: "10px auto"}}
+      >
         <span>{this.props.number}: {this.props.title} 
+        
           
         </span>
         <IconButton 
@@ -51,49 +57,38 @@ class Post extends Component {
         </IconButton>
         
 
-        <div class="flex">
-          <div class="image-wrapper">
-            <img src={image_url} width="150"></img>
+        <Box sx={{display: "flex", flexWrap: "wrap"}}>
+          <CardMedia
+            component="img"
+            height="180"
+            width="280"
+            image={image_url}
+            alt="Paella dish"
+          />
+
+          <div class="rating-wrapper" style={{padding: "12px"}}>
+            <Box sx={{display: "flex", marginBottom: "5px"}}>
+              <Typography variant="caption">手軽さ:</Typography>
+              <Rating name="read-only" value={this.props.ease_score} size="small" style={{marginLeft: "auto"}} readOnly />
+            </Box>
+            <Box sx={{display: "flex", marginBottom: "5px"}}>
+              <Typography variant="caption">コスパ:</Typography>
+              <Rating name="read-only" value={this.props.cost_score} size="small" style={{marginLeft: "auto"}} readOnly />
+            </Box>
+            <Box sx={{display: "flex", marginBottom: "5px"}}>
+              <Typography variant="caption">ヘルシーさ:</Typography>
+              <Rating name="read-only" value={this.props.health_score} size="small" style={{marginLeft: "auto"}} readOnly />
+            </Box>
           </div>
-          <RadarChart  // レーダーチャート全体の設定を記述
-              cx="50%"  // 要素の左端とチャートの中心点との距離(0にするとチャートの左半分が隠れる)
-              cy="50%"  // 要素の上部とチャートの中心点との距離(0にするとチャートの上半分が隠れる)
-              outerRadius={90}  // レーダーチャート全体の大きさ  
-              width={250}  // レーダーチャートが記載される幅(この幅よりチャートが大きい場合、はみ出た箇所は表示されない)
-              height={220}   // レーダーチャートが記載される高さ
-              data={data}  
-          >
-              {/* レーダーチャートの蜘蛛の巣のような線 */}
-              <PolarGrid />
-              {/* 項目を決めるデータのキー(サンプルでいう数学や歴史) */}
-              <PolarAngleAxis 
-                dataKey="item" 
-                fill="fff"
-                tick={{fill: 'white', fontSize: 10}}
-              />
-              
-              {/* 目安となる数値が表示される線を指定  */}
-              <PolarRadiusAxis 
-                  angle={90}  // 中心点から水平を0°とした時の角度 垂直にしたいなら90を指定
-                  domain={[1,5]}  // リストの１番目の要素が最小値、2番目の要素が最大値
-              />  
-              
-              {/* レーダーを表示 */}
-              <Radar
-                  dataKey="value"   // 表示する値と対応するdata内のキー
-                  stroke="#ffaa00"  // レーダーの外枠の色
-                  fill="#ffaa00"  // レーダー内の色
-                  fillOpacity={0.6}  // レーダー内の色の濃さ(1にすると濃さMAX)
-              />
-          </RadarChart>
-        </div>
+        </Box>
+        
         <div class="discription">
           <p>{this.props.description}</p>
         </div>
         <p>{this.props.created_at}</p>
         
         
-      </li>
+      </Card>
 
       
 
