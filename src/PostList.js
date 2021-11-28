@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Post from './Post';
+import Box from '@mui/material/Box';
 
 
 
@@ -16,9 +17,9 @@ class PostList extends Component {
     )
 
     return(
-      <ul class="post_list">
+      <Box className="postList" sx={{display: "flex", flexWrap: "wrap", width: "100%"}}>
         {posts}
-      </ul>
+      </Box>
     );
   }
 }
