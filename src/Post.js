@@ -26,7 +26,7 @@ class Post extends Component {
     this.state = {
       isOpenModal: false,
     }
-    
+
   }
 
   deletePost(docId) {
@@ -56,8 +56,6 @@ class Post extends Component {
   render() {
     const className = 'post'
 
-    
-
     let image_url = this.props.image_url
     if (!this.props.image_url) {
       image_url = NoImageIcon
@@ -74,6 +72,13 @@ class Post extends Component {
       p: 4,
       outline: "none",
     };
+
+    const timeValue = (this.props.time !== null) ? this.props.time : "?";
+    const costValue = (this.props.cost !== null) ? this.props.cost : "?";
+
+  
+
+    
 
     
 
@@ -116,12 +121,14 @@ class Post extends Component {
         
         
         <Box sx={{display: "flex", padding: "6px"}}>
-          <AccessTimeIcon sx={{color: "pink", fontSize: "21px", padding: "2px"}}></AccessTimeIcon>
-          <Typography variant="subtitle2">{this.props.ease_score}</Typography>
-          <SavingsIcon sx={{color: "gold", fontSize: "21px", padding: "2px"}}></SavingsIcon>
-          <Typography variant="subtitle2">{this.props.cost_score}</Typography>
-          <SpaIcon sx={{color: "lightgreen", fontSize: "21px", padding: "2px"}}></SpaIcon>
-          <Typography variant="subtitle2">{this.props.health_score}</Typography>
+          <Box sx={{display: "flex"}}>
+            <AccessTimeIcon sx={{color: "pink", fontSize: "21px", padding: "2px"}}></AccessTimeIcon>
+            <Typography variant="subtitle2">{timeValue}分</Typography>
+          </Box>
+          <Box sx={{display: "flex"}}>
+            <SavingsIcon sx={{color: "gold", fontSize: "21px", padding: "2px"}}></SavingsIcon>
+            <Typography variant="subtitle2">{costValue}円(1人分)</Typography>
+          </Box>
         </Box>
         
         
@@ -158,18 +165,20 @@ class Post extends Component {
 
             <div class="info-wrapper">
               <div class="rating-wrapper" style={{padding: "12px"}}>
+              <Box sx={{display: "flex"}}>
                 <Box sx={{display: "flex", marginBottom: "5px"}}>
-                  <Typography variant="caption">手軽さ:</Typography>
-                  <Rating name="read-only" value={this.props.ease_score} size="small" style={{marginLeft: "auto"}} readOnly />
+                  <AccessTimeIcon sx={{color: "pink", fontSize: "21px", padding: "2px"}}></AccessTimeIcon>
+                  <Typography variant="subtitle2" sx={{marginRight: "5px"}}>調理時間</Typography>
                 </Box>
+                <Typography variant="subtitle2">{timeValue}分</Typography>
+              </Box>
+              <Box sx={{display: "flex"}}>
                 <Box sx={{display: "flex", marginBottom: "5px"}}>
-                  <Typography variant="caption">コスパ:</Typography>
-                  <Rating name="read-only" value={this.props.cost_score} size="small" style={{marginLeft: "auto"}} readOnly />
+                  <SavingsIcon sx={{color: "gold", fontSize: "21px", padding: "2px"}}></SavingsIcon>
+                  <Typography variant="subtitle2" sx={{marginRight: "5px"}}>1人分の材料費</Typography>
                 </Box>
-                <Box sx={{display: "flex", marginBottom: "5px"}}>
-                  <Typography variant="caption">ヘルシーさ:</Typography>
-                  <Rating name="read-only" value={this.props.health_score} size="small" style={{marginLeft: "auto"}} readOnly />
-                </Box>
+                <Typography variant="subtitle2">{costValue}円</Typography>
+              </Box>
               </div>
 
               <CardContent style={{padding: "8px"}}>

@@ -37,7 +37,7 @@ class Form extends Component {
   handleSubmit = (values) => {
     values.preventDefault();
     
-    if (uploadedImage.length !== null) {
+    if (uploadedImage !== null) {
       this.setState({
         values: values
       })
@@ -50,13 +50,22 @@ class Form extends Component {
   
   post = (values, image_url) => {
     const docId = db.collection("meals").doc().id;
+    let time = Number(values.target.time.value)
+    let cost = Number(values.target.cost.value)
+
+    // Numberの中身がnullだと勝手に0になるので、null指定してあげる
+    if (!values.target.time.value) {
+      time = null
+    }
+    if (!values.target.cost.value) {
+      cost = null
+    }
     db.collection("meals").doc(docId).set({
         id: docId,
         title: values.target.title.value,
         description: values.target.description.value,
-        health_score: Number(values.target.health_score.value),
-        ease_score: Number(values.target.ease_score.value),
-        cost_score: Number(values.target.cost_score.value),
+        time: time,
+        cost: cost,
         ingredients: [], // 次回実装
         user_id: auth.currentUser.uid,
         image_url: image_url,
@@ -129,52 +138,46 @@ class Form extends Component {
             margin="dense"
             fullWidth
             /><br/>
-          <Box
-            sx={{
-              '& > legend': { mt: 2 },
+          <TextField 
+            name="cost" 
+            type="number" 
+            InputLabelProps={{
+              style: { color: '#fff' },
             }}
-          >
-            <div class="rating">
-              <Typography variant="subtitle2" component="legend">手軽さ {this.state.ease_score}</Typography>
-              <Rating
-                name="ease_score"
-                value={this.state.ease_score}
-                onChange={(event, newValue) => {
-                  this.setState({
-                    ease_score: newValue
-                  })
-                }}
-              />
-
-            </div>
-            
-            <div class="rating">
-              <Typography variant="subtitle2" component="legend">コスパ {this.state.cost_score}</Typography>
-              <Rating
-                name="cost_score"
-                value={this.state.cost_score}
-                onChange={(event, newValue) => {
-                  this.setState({
-                    cost_score: newValue
-                  })
-                }}
-              />
-            </div>
-
-            <div class="rating">
-              <Typography variant="subtitle2" component="legend">ヘルシー度 {this.state.health_score}</Typography>
-              <Rating
-                name="health_score"
-                value={this.state.health_score}
-                onChange={(event, newValue) => {
-                  this.setState({
-                    health_score: newValue
-                  })
-                }}
-              />
-            </div>
-            
-          </Box>
+            InputProps={{
+              style: {color: 'white'}
+            }}
+            label="費用（1人前）" 
+            defaultValue={null}
+            onChange={(event) => // マイナスの入力があったら0にする
+              event.target.value < 0
+                  ? (event.target.value = 0)
+                  : event.target.value
+            }
+            variant="outlined"
+            margin="dense"
+            fullWidth
+            /><br/>
+          <TextField 
+            name="time" 
+            type="number" 
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: {color: 'white'}
+            }}
+            label="調理時間（分）" 
+            onChange={(event) => // マイナスの入力があったら0にする
+              event.target.value < 0
+                  ? (event.target.value = 0)
+                  : event.target.value
+            }
+            defaultValue={null} 
+            variant="outlined"
+            margin="dense"
+            fullWidth
+            /><br/>
 
           <ImageUploader image_info={this.state.image}></ImageUploader>
           <Button 
