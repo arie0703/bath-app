@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import './css/form.css';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Rating from '@mui/material/Rating';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import ImageUploader from './ImageUploader.js'
 import firebase, { storage, auth, db } from './firebase';
 import {uploadedImage} from './UploadedImage';
@@ -66,7 +63,7 @@ class Form extends Component {
         description: values.target.description.value,
         time: time,
         cost: cost,
-        ingredients: [], // 次回実装
+        ingredients: values.target.ingredients.value.split(/[　,、 ]/), // 半角or全角スペース, カンマで区切る
         user_id: auth.currentUser.uid,
         image_url: image_url,
         created_at: firebase.firestore.Timestamp.now()
@@ -135,6 +132,19 @@ class Form extends Component {
             defaultValue="" 
             variant="outlined"
             rows={4}
+            margin="dense"
+            fullWidth
+            /><br/>
+          <TextField
+            name="ingredients" 
+            InputProps={{
+              style: {color: 'white'}
+            }}
+            type="text" 
+            InputLabelProps={{ style: {color: 'white'}}}
+            label="材料（スペースorカンマで区切る）" 
+            defaultValue="" 
+            variant="outlined"
             margin="dense"
             fullWidth
             /><br/>
