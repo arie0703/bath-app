@@ -72,16 +72,11 @@ class Post extends Component {
       p: 4,
       outline: "none",
     };
-
+    const ingredients = this.props.ingredients.map( ingredient =>
+      <li>{ingredient}</li>
+    )
     const timeValue = (this.props.time !== null) ? this.props.time : "?";
     const costValue = (this.props.cost !== null) ? this.props.cost : "?";
-
-  
-
-    
-
-    
-
     
     return(
 
@@ -164,7 +159,7 @@ class Post extends Component {
             />
 
             <div class="info-wrapper">
-              <div class="rating-wrapper" style={{padding: "12px"}}>
+              <div style={{padding: "12px"}}>
               <Box sx={{display: "flex"}}>
                 <Box sx={{display: "flex", marginBottom: "5px"}}>
                   <AccessTimeIcon sx={{color: "pink", fontSize: "21px", padding: "2px"}}></AccessTimeIcon>
@@ -180,6 +175,11 @@ class Post extends Component {
                 <Typography variant="subtitle2">{costValue}円</Typography>
               </Box>
               </div>
+
+              <Box style={{padding: "4px 12px", display: this.props.ingredients.length ? "block" : "none"}}>
+                <Typography variant="subtitle2">材料</Typography>
+                {ingredients}
+              </Box>
 
               <CardContent style={{padding: "8px"}}>
                 <Typography variant="caption">{this.props.description}</Typography>
