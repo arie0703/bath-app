@@ -77,6 +77,7 @@ class Post extends Component {
     )
     const timeValue = (this.props.time !== null) ? this.props.time : "?";
     const costValue = (this.props.cost !== null) ? this.props.cost : "?";
+    const caloriesValue = (this.props.calories !== null) ? this.props.calories : "?";
     
     return(
 
@@ -122,7 +123,11 @@ class Post extends Component {
           </Box>
           <Box sx={{display: "flex"}}>
             <SavingsIcon sx={{color: "gold", fontSize: "21px", padding: "2px"}}></SavingsIcon>
-            <Typography variant="subtitle2">{costValue}円(1人分)</Typography>
+            <Typography variant="subtitle2">{costValue}円</Typography>
+          </Box>
+          <Box sx={{display: "flex"}}>
+            <SpaIcon sx={{color: "lightgreen", fontSize: "21px", padding: "2px"}}></SpaIcon>
+            <Typography variant="subtitle2">{caloriesValue}kcal</Typography>
           </Box>
         </Box>
         
@@ -173,6 +178,13 @@ class Post extends Component {
                   <Typography variant="subtitle2" sx={{marginRight: "5px"}}>1人分の材料費</Typography>
                 </Box>
                 <Typography variant="subtitle2">{costValue}円</Typography>
+              </Box>
+              <Box sx={{display: "flex"}}>
+                <Box sx={{display: "flex", marginBottom: "5px"}}>
+                  <SpaIcon sx={{color: "lightgreen", fontSize: "21px", padding: "2px"}}></SpaIcon>
+                  <Typography variant="subtitle2" sx={{marginRight: "5px"}}>カロリー</Typography>
+                </Box>
+                <Typography variant="subtitle2">{caloriesValue}kcal</Typography>
               </Box>
               </div>
 

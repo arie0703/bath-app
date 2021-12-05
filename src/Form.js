@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import './css/form.css';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import InputAdornment from '@mui/material/InputAdornment';
+import SavingsIcon from '@mui/icons-material/Savings';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import Typography from '@mui/material/Typography';
 import ImageUploader from './ImageUploader.js'
 import firebase, { storage, auth, db } from './firebase';
 import {uploadedImage} from './UploadedImage';
@@ -49,6 +53,8 @@ class Form extends Component {
     const docId = db.collection("meals").doc().id;
     let time = Number(values.target.time.value)
     let cost = Number(values.target.cost.value)
+    let calories = Number(values.target.calories.value)
+    let ingredients = values.target.ingredients.value.split(/[　,、 ]/) // 半角or全角スペース, カンマで区切る
 
     // Numberの中身がnullだと勝手に0になるので、null指定してあげる
     if (!values.target.time.value) {
@@ -57,13 +63,22 @@ class Form extends Component {
     if (!values.target.cost.value) {
       cost = null
     }
+    if (!values.target.calories.value) {
+      calories = null
+    }
+    if (!values.target.ingredients.value) { //何も入力していないとingredientsの値は""となっている
+      ingredients = []
+    }
+
+    
     db.collection("meals").doc(docId).set({
         id: docId,
         title: values.target.title.value,
         description: values.target.description.value,
         time: time,
         cost: cost,
-        ingredients: values.target.ingredients.value.split(/[　,、 ]/), // 半角or全角スペース, カンマで区切る
+        calories: calories,
+        ingredients: ingredients,
         user_id: auth.currentUser.uid,
         image_url: image_url,
         created_at: firebase.firestore.Timestamp.now()
@@ -155,7 +170,17 @@ class Form extends Component {
               style: { color: '#fff' },
             }}
             InputProps={{
-              style: {color: 'white'}
+              style: {color: 'white'},
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SavingsIcon sx={{color: "gold"}}/>
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Typography style={{color: "white"}}>円</Typography>
+                </InputAdornment>
+              ),
             }}
             label="費用（1人前）" 
             defaultValue={null}
@@ -175,9 +200,19 @@ class Form extends Component {
               style: { color: '#fff' },
             }}
             InputProps={{
-              style: {color: 'white'}
+              style: {color: 'white'},
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccessTimeIcon sx={{color: "pink"}}/>
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Typography style={{color: "white"}}>分</Typography>
+                </InputAdornment>
+              ),
             }}
-            label="調理時間（分）" 
+            label="調理時間" 
             onChange={(event) => // マイナスの入力があったら0にする
               event.target.value < 0
                   ? (event.target.value = 0)
@@ -188,6 +223,32 @@ class Form extends Component {
             margin="dense"
             fullWidth
             /><br/>
+          <TextField 
+            name="calories" 
+            type="number" 
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: {color: 'white'},
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Typography style={{color: "white"}}>kcal</Typography>
+                </InputAdornment>
+              ),
+            }}
+            label="カロリー" 
+            onChange={(event) => // マイナスの入力があったら0にする
+              event.target.value < 0
+                  ? (event.target.value = 0)
+                  : event.target.value
+            }
+            defaultValue={null} 
+            variant="outlined"
+            margin="dense"
+            fullWidth
+            /><br/> 
+          
 
           <ImageUploader image_info={this.state.image}></ImageUploader>
           <Button 
