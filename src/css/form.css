@@ -23,6 +23,13 @@ textarea {
     max-height: 300px;
 }
 
+/* カロリーや費用入力欄のスピンボタンを非表示 */
+input[type="number"]::-webkit-outer-spin-button, 
+input[type="number"]::-webkit-inner-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+} 
+
 /* importantはダークモードが適切に実装できたら消す */
 
 fieldset {
