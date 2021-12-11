@@ -5,6 +5,11 @@ import '../css/Post.css';
 import CalendarHeatmap from "react-calendar-heatmap";
 import { auth, db } from '../firebase';
 import ReactTooltip from "react-tooltip";
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import InputAdornment from '@mui/material/InputAdornment';
 
 class MyPost extends Component {
 
@@ -12,10 +17,12 @@ class MyPost extends Component {
     super()
     const posts = []
     const dates = []
+    const calories_params = 0
 
     this.state = {
       posts: posts,
       dates: dates,
+      calories_params: calories_params,
     }
     
   }
@@ -32,6 +39,24 @@ class MyPost extends Component {
       posts: docs,
     });
 
+  }
+
+  search = async () => {
+    const ref = db.collection("meals").where('calories', '<=', Number(this.state.calories_params));
+    const snapshots = await ref.get();
+    const docs = snapshots.docs.map(doc => doc.data());
+    await this.setState({
+      posts: docs,
+    });
+  }
+
+  handleChange = (e) => {
+    if (e.target.value < 0) {
+      e.target.value = 0
+    } 
+    this.setState({
+      calories_params: e.target.value
+    })
   }
 
   setHeatMap(docs) { // 各投稿の日付を参照して芝生を生やす処理
@@ -120,6 +145,33 @@ class MyPost extends Component {
         />
           
         <ReactTooltip effect='solid'/>
+        <Box>
+          <Typography sx={{textAlign: "center"}}>カロリーで検索</Typography>
+          <Box sx={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <TextField 
+              type="number" 
+              sx={{
+                marginRight: "5px",
+              }}
+              InputLabelProps={{
+                style: { color: '#fff' },
+              }}
+              InputProps={{
+                style: {color: 'white'},
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Typography style={{color: "white"}}>kcal以下</Typography>
+                  </InputAdornment>
+                ),
+              }}
+              onChange={this.handleChange}
+              defaultValue={this.state.calories_params} 
+              variant="outlined"
+              margin="dense"
+              />
+            <Button sx={{display: "inline-block", verticalAlign: "middle"}} onClick={() => this.search()} variant="contained">Search</Button>
+          </Box>
+        </Box>
         
         <PostList
           posts={this.state.posts}
