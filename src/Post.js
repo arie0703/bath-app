@@ -3,13 +3,13 @@ import './css/Post.css';
 import {db} from './firebase'
 import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
-import Rating from '@mui/material/Rating';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Avatar from '@mui/material/Avatar';
 import SavingsIcon from '@mui/icons-material/Savings';
-import SpaIcon from '@mui/icons-material/Spa';
+import WhatshotIcon from '@mui/icons-material/Whatshot';
+import BarChartIcon from '@mui/icons-material/BarChart';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -78,7 +78,11 @@ class Post extends Component {
     const timeValue = (this.props.time !== null) ? this.props.time : "?";
     const costValue = (this.props.cost !== null) ? this.props.cost : "?";
     const caloriesValue = (this.props.calories !== null) ? this.props.calories : "?";
-    
+
+    const protein = (this.props.protein !== null) ? this.props.protein : "?";
+    const fat = (this.props.fat !== null) ? this.props.fat : "?";
+    const carbo = (this.props.carbo !== null) ? this.props.carbo : "?";
+
     return(
 
       <div>
@@ -126,9 +130,16 @@ class Post extends Component {
             <Typography variant="subtitle2">{costValue}円</Typography>
           </Box>
           <Box sx={{display: "flex"}}>
-            <SpaIcon sx={{color: "lightgreen", fontSize: "21px", padding: "2px"}}></SpaIcon>
+            <WhatshotIcon sx={{color: "orange", fontSize: "21px", padding: "2px"}}></WhatshotIcon>
             <Typography variant="subtitle2">{caloriesValue}kcal</Typography>
           </Box>
+
+          
+        </Box>
+
+        <Box sx={{display: "flex" ,paddingLeft: "6px"}}>
+          <BarChartIcon sx={{color: "grey", fontSize: "21px", padding: "2px"}}></BarChartIcon>
+          <Typography variant="subtitle2">P: {protein} F: {fat} C: {carbo}</Typography>
         </Box>
         
         
@@ -181,10 +192,16 @@ class Post extends Component {
               </Box>
               <Box sx={{display: "flex"}}>
                 <Box sx={{display: "flex", marginBottom: "5px"}}>
-                  <SpaIcon sx={{color: "lightgreen", fontSize: "21px", padding: "2px"}}></SpaIcon>
+                  <WhatshotIcon sx={{color: "orange", fontSize: "21px", padding: "2px"}}></WhatshotIcon>
                   <Typography variant="subtitle2" sx={{marginRight: "5px"}}>カロリー</Typography>
                 </Box>
                 <Typography variant="subtitle2">{caloriesValue}kcal</Typography>
+              </Box>
+              <Box sx={{display: "flex"}}>
+                <Box sx={{display: "flex", marginBottom: "5px"}}>
+                  <BarChartIcon sx={{color: "grey", fontSize: "21px", padding: "2px"}}></BarChartIcon>
+                  <Typography variant="subtitle2" sx={{marginRight: "5px"}}>P: {protein} F: {fat} C: {carbo}</Typography>
+                </Box>
               </Box>
               </div>
 
