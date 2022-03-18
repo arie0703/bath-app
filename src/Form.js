@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import ImageUploader from './ImageUploader.js'
 import firebase, { storage, auth, db } from './firebase';
 import {uploadedImage} from './UploadedImage';
+import Box from '@mui/material/Box';
 
 class Form extends Component {
 
@@ -55,6 +56,10 @@ class Form extends Component {
     let cost = Number(values.target.cost.value)
     let calories = Number(values.target.calories.value)
     let ingredients = values.target.ingredients.value.split(/[　,、 ]/) // 半角or全角スペース, カンマで区切る
+    let protein = Number(values.target.protein.value)
+    let fat = Number(values.target.fat.value)
+    let carbo = Number(values.target.carbo.value)
+    console.log(protein,fat,carbo);
 
     // Numberの中身がnullだと勝手に0になるので、null指定してあげる
     if (!values.target.time.value) {
@@ -66,11 +71,19 @@ class Form extends Component {
     if (!values.target.calories.value) {
       calories = null
     }
+    if (!values.target.protein.value) {
+      protein = null
+    }
+    if (!values.target.fat.value) {
+      fat = null
+    }
+    if (!values.target.carbo.value) {
+      carbo = null
+    }
     if (!values.target.ingredients.value) { //何も入力していないとingredientsの値は""となっている
       ingredients = []
     }
 
-    
     db.collection("meals").doc(docId).set({
         id: docId,
         title: values.target.title.value,
@@ -79,6 +92,9 @@ class Form extends Component {
         cost: cost,
         calories: calories,
         ingredients: ingredients,
+        protein: protein,
+        fat: fat,
+        carbo: carbo,
         user_id: auth.currentUser.uid,
         image_url: image_url,
         created_at: firebase.firestore.Timestamp.now()
@@ -248,6 +264,49 @@ class Form extends Component {
             margin="dense"
             fullWidth
             /><br/> 
+
+          <Box style={{display: "flex"}}>
+            <TextField
+            name="protein" 
+            InputProps={{
+              style: {color: 'white'}
+            }}
+            type="number" 
+            InputLabelProps={{ style: {color: 'white'}}}
+            label="P" 
+            defaultValue="" 
+            variant="outlined"
+            margin="dense"
+            fullWidth
+            />
+            <TextField
+            name="fat" 
+            InputProps={{
+              style: {color: 'white'}
+            }}
+            type="number" 
+            InputLabelProps={{ style: {color: 'white'}}}
+            label="F"
+            defaultValue=""
+            variant="outlined"
+            margin="dense"
+            fullWidth
+            />
+            <TextField
+            name="carbo"
+            InputProps={{
+              style: {color: 'white'}
+            }}
+            type="number"
+            InputLabelProps={{ style: {color: 'white'}}}
+            label="C" 
+            defaultValue="" 
+            variant="outlined"
+            margin="dense"
+            fullWidth
+            />
+          </Box>
+          
           
 
           <ImageUploader image_info={this.state.image}></ImageUploader>
