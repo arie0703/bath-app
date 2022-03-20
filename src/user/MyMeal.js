@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import PostList from '../PostList'
-import Form from '../Form';
-import '../css/Post.css';
+import MealList from '../meals/MealList'
+import Form from '../meals/Form';
+import '../css/meal.css';
 import CalendarHeatmap from "react-calendar-heatmap";
 import { auth, db } from '../firebase';
 import ReactTooltip from "react-tooltip";
@@ -11,16 +11,16 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 
-class MyPost extends Component {
+class MyMeal extends Component {
 
   constructor() {
     super()
-    const posts = []
+    const meals = []
     const dates = []
     const calories_params = 0
 
     this.state = {
-      posts: posts,
+      meals: meals,
       dates: dates,
       calories_params: calories_params,
     }
@@ -36,7 +36,7 @@ class MyPost extends Component {
     const docs = snapshots.docs.map(doc => doc.data());
     this.setHeatMap(docs);
     await this.setState({
-      posts: docs,
+      meals: docs,
     });
 
   }
@@ -46,7 +46,7 @@ class MyPost extends Component {
     const snapshots = await ref.get();
     const docs = snapshots.docs.map(doc => doc.data());
     await this.setState({
-      posts: docs,
+      meals: docs,
     });
   }
 
@@ -107,7 +107,7 @@ class MyPost extends Component {
 
   render() {
     return (
-      <div className="mypost">
+      <div className="myMeal">
         
         <Form/>
         <CalendarHeatmap
@@ -173,12 +173,12 @@ class MyPost extends Component {
           </Box>
         </Box>
         
-        <PostList
-          posts={this.state.posts}
+        <MealList
+          meals={this.state.meals}
           />
       </div>
     );
   }
 }
 
-export default MyPost;
+export default MyMeal;
