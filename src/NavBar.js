@@ -1,7 +1,7 @@
 import React  from 'react'
 import SignUp from './user/SignUp'
 import SignIn from './user/SignIn'
-import MyPost from './user/MyPost'
+import MyMeal from './user/MyMeal'
 import TopPage from './TopPage'
 import './css/App.css';
 import { useAuthContext } from './AuthContext';
@@ -25,12 +25,12 @@ const NavBar = () => {
         <BrowserRouter>
           <nav class="nav-bar">
             <Link to="/">Top</Link>
-            <Link to="/mypost">My Post</Link>
+            <Link to="/mymeal">My Post</Link>
             <p class="signout" onClick={signOut}>Sign Out</p>
           </nav>
           <Switch>
             <Route exact path="/" component={TopPage} /> 
-            <Route exact path="/mypost" component={MyPost} />   
+            <Route exact path="/mymeal" component={MyMeal} />   
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/signin" component={SignIn} />  
           </Switch>

@@ -2,9 +2,9 @@ import React, { useState, useCallback } from "react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { Typography } from "@material-ui/core";
-import './css/form.css';
+import '../css/form.css';
 import { useDropzone } from "react-dropzone";
-import {uploadedImage, setImage} from './UploadedImage';
+import {uploadedImage, setImage} from '../UploadedImage';
 
 
 const ImageUploader = () => {

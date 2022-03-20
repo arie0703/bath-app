@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import './css/form.css';
+import '../css/form.css';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -7,8 +7,8 @@ import SavingsIcon from '@mui/icons-material/Savings';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Typography from '@mui/material/Typography';
 import ImageUploader from './ImageUploader.js'
-import firebase, { storage, auth, db } from './firebase';
-import {uploadedImage} from './UploadedImage';
+import firebase, { storage, auth, db } from '../firebase';
+import {uploadedImage} from '../UploadedImage';
 import Box from '@mui/material/Box';
 
 class Form extends Component {
