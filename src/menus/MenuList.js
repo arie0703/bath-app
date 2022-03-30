@@ -2,16 +2,24 @@ import React, { Component } from 'react';
 import MenuCard from './MenuCard';
 import Box from '@mui/material/Box';
 import { auth, db } from '../firebase';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import AddMenuModal from './AddMenuModal';
 
 
 
 class MenuList extends Component {
     constructor() {
         super()
+        this.modalRef = React.createRef();
         const menus = []
         this.state = {
           menus: menus,
         }
+    }
+
+    openModal(){
+        this.modalRef.current.handleOpen();
     }
 
     getData = async () =>{
@@ -51,8 +59,21 @@ class MenuList extends Component {
         )
 
         return(
-        <Box className="MenuList" sx={{display: "flex", flexWrap: "wrap", width: "100%"}}>
-            {menus}
+        <Box>
+            <Button 
+                variant="contained" 
+                startIcon={<AddIcon />}
+                onClick={this.openModal.bind(this)}
+            >
+                献立セットを追加
+            </Button>
+            <Box className="MenuList" sx={{display: "flex", flexWrap: "wrap", width: "100%"}}>
+                {menus}
+            </Box>
+            <AddMenuModal
+                ref={this.modalRef}
+            >
+            </AddMenuModal>
         </Box>
         );
     }
