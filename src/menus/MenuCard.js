@@ -4,8 +4,6 @@ import {db} from '../firebase'
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import CardMedia from '@mui/material/CardMedia';
-import NoImageIcon from '../assets/no_image.jpeg';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import BarChartIcon from '@mui/icons-material/BarChart';
 
@@ -54,19 +52,26 @@ class MenuCard extends Component {
     const className = 'menuCard'
 
     const meals = this.state.meals.map( meal =>
-        <Box sx={{padding: "6px", borderRight: 1, borderColor: 'grey.800'}}>
-            <CardMedia
-              component="img"
-              height="150"
-              width="150"
-              image={meal[0].image_url ? meal[0].image_url: NoImageIcon}
-              alt="Dish"
-              sx={{
-                margin: "0 auto"
-              }}
-            />
-            <Typography variant="subtitle2">{meal[0].title}</Typography>
-        </Box>
+      <Card 
+          sx={{width: "300px"}}
+          style={{backgroundColor: '#555', color: "#eee", padding: "6px", margin: "10px"}}
+      >
+          <Typography sx={{padding: '8px'}}>{meal[0].title}</Typography>
+          <Box sx={{display: "flex"}}>
+              <Box sx={{display: "flex", padding: "8px"}}>
+                  <Box sx={{display: "flex"}}>
+                      <WhatshotIcon sx={{color: "orange", fontSize: "21px", padding: "2px"}}></WhatshotIcon>
+                      <Typography variant="subtitle2">{meal[0].calories}kcal</Typography>
+                  </Box>
+              </Box>
+
+              <Box sx={{display: "flex" ,padding: "8px"}}>
+              <BarChartIcon sx={{color: "grey", fontSize: "21px", padding: "2px"}}></BarChartIcon>
+              <Typography variant="subtitle2">P: {meal[0].protein} F: {meal[0].fat} C: {meal[0].carbo}</Typography>
+              </Box>
+          </Box>
+
+      </Card>
     )
 
     return(
@@ -77,7 +82,7 @@ class MenuCard extends Component {
         style={{backgroundColor: '#222', color: "#eee", padding: "4px", margin: "10px"}}
       >
         <Typography variant="subtitle2">{this.props.title}</Typography>
-        <Box sx={{display: "flex", padding: "6px"}}>
+        <Box sx={{padding: "6px"}}>
           {meals}
         </Box>
         <Box sx={{padding: "6px"}}>
