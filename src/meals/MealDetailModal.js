@@ -69,9 +69,6 @@ class MealDetailModal extends Component {
             p: 4,
             outline: "none",
         };
-        const ingredients = this.props.ingredients.map( ingredient =>
-            <li>{ingredient}</li>
-        )
 
         const image_url = this.props.image_url;
         const timeValue = this.props.timeValue;
@@ -153,11 +150,6 @@ class MealDetailModal extends Component {
                                 </Box>
                             </Box>
                             </div>
-
-                            <Box style={{padding: "4px 12px", display: this.props.ingredients.length ? "block" : "none"}}>
-                                <Typography variant="subtitle2">材料</Typography>
-                                {ingredients}
-                            </Box>
 
                             <CardContent style={{padding: "8px"}}>
                                 <Typography variant="caption">{this.props.description}</Typography>

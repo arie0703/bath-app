@@ -35,7 +35,6 @@ class MealEditMode extends Component {
         let time = Number(values.target.time.value)
         let cost = Number(values.target.cost.value)
         let calories = Number(values.target.calories.value)
-        let ingredients = values.target.ingredients.value.split(/[　,、 ]/) // 半角or全角スペース, カンマで区切る
         let protein = Number(values.target.protein.value)
         let fat = Number(values.target.fat.value)
         let carbo = Number(values.target.carbo.value)
@@ -59,17 +58,12 @@ class MealEditMode extends Component {
         if (!values.target.carbo.value) {
           carbo = null
         }
-        if (!values.target.ingredients.value) { //何も入力していないとingredientsの値は""となっている
-          ingredients = []
-        }
-    
         db.collection("meals").doc(docId).update({
             title: values.target.title.value,
             description: values.target.description.value,
             time: time,
             cost: cost,
             calories: calories,
-            ingredients: ingredients,
             protein: protein,
             fat: fat,
             carbo: carbo,
@@ -256,22 +250,6 @@ class MealEditMode extends Component {
                     </Box>
                     </div>
 
-                    <Box style={{padding: "4px 12px", display: this.props.ingredients.length ? "block" : "none"}}>
-                        <TextField
-                        name="ingredients" 
-                        size="small"
-                        InputProps={{
-                        style: {color: 'white'}
-                        }}
-                        type="text" 
-                        InputLabelProps={{ style: {color: 'white'}}}
-                        label="材料" 
-                        defaultValue={this.props.ingredients} 
-                        variant="outlined"
-                        margin="dense"
-                        fullWidth
-                        />
-                    </Box>
 
                     <CardContent style={{padding: "8px"}}>
                     <TextField 

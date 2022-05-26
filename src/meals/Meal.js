@@ -31,9 +31,9 @@ class Meal extends Component {
   }
 
 
-  openModal(){
-    this.modalRef.current.handleOpen();
-  }
+  // openModal(){
+  //   this.modalRef.current.handleOpen();
+  // }
 
   render() {
     const className = 'meal'
@@ -42,8 +42,16 @@ class Meal extends Component {
     if (!this.props.image_url) {
       image_url = NoImageIcon
     }
+    let d = new Date(this.props.created_at)
 
-    const timeValue = (this.props.time !== null) ? this.props.time : "?";
+
+    let formatted = `
+    ${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getDate().toString().padStart(2, '0')}
+    `.replace(/\n|\r/g, '');
+
+    const created_at = formatted;
+
+    const timeValue = (this.props.cook_time !== null) ? this.props.cook_time : "?";
     const costValue = (this.props.cost !== null) ? this.props.cost : "?";
     const caloriesValue = (this.props.calories !== null) ? this.props.calories : "?";
 
@@ -58,7 +66,6 @@ class Meal extends Component {
         className={className}
         sx={{width: "280px"}}
         style={{backgroundColor: '#222', color: "#eee", padding: "4px", margin: "10px"}}
-        onClick={this.openModal.bind(this)}
       >
         <CardHeader
           avatar={
@@ -66,10 +73,10 @@ class Meal extends Component {
               U
             </Avatar>
           }
-          title={this.props.title}
+          title={this.props.name}
           subheader={
             <Typography sx={{color: "#ddd"}} variant="caption">
-              {this.props.created_at}
+              {created_at}
             </Typography>
           }
         />
@@ -110,7 +117,7 @@ class Meal extends Component {
       </Card>
 
 
-      <MealDetailModal
+      {/* <MealDetailModal
             {...this.props}
             ref={this.modalRef}
             image_url={image_url}
@@ -121,7 +128,7 @@ class Meal extends Component {
             fat={fat}
             carbo={carbo}
           >
-      </MealDetailModal>
+      </MealDetailModal> */}
 
 
       </div>

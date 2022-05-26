@@ -12,7 +12,7 @@ class MealList extends Component {
         key={meal.id}
         {...meal}
         number={this.props.meals.length - (this.props.meals.indexOf(meal))}
-        created_at={meal.created_at.toDate().toLocaleString('ja-JP')}
+        created_at={meal.created_at}
       />
     )
 
