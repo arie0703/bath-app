@@ -11,6 +11,7 @@ import ImageUploader from './ImageUploader.js'
 import firebase, { storage, auth, db } from '../firebase';
 import {uploadedImage} from '../UploadedImage';
 import Box from '@mui/material/Box';
+import axios from 'axios'
 
 class Form extends Component {
 
@@ -24,7 +25,6 @@ class Form extends Component {
       ease_score: 1,
       values: [],
     }
-    
   }
 
   handleOpen(){
@@ -56,67 +56,46 @@ class Form extends Component {
 
   handleSubmit = (values) => {
     values.preventDefault();
-    
     if (uploadedImage !== null) {
       this.setState({
         values: values
       })
       this.imageUpload()
-      
     } else {
       this.post(values, null)
     }
   }
-  
   post = (values, image_url) => {
-    const docId = db.collection("meals").doc().id;
-    let time = Number(values.target.time.value)
-    let cost = Number(values.target.cost.value)
-    let calories = Number(values.target.calories.value)
-    let ingredients = values.target.ingredients.value.split(/[　,、 ]/) // 半角or全角スペース, カンマで区切る
-    let protein = Number(values.target.protein.value)
-    let fat = Number(values.target.fat.value)
-    let carbo = Number(values.target.carbo.value)
-    console.log(protein,fat,carbo);
 
-    // Numberの中身がnullだと勝手に0になるので、null指定してあげる
-    if (!values.target.time.value) {
-      time = null
-    }
-    if (!values.target.cost.value) {
-      cost = null
-    }
-    if (!values.target.calories.value) {
-      calories = null
-    }
-    if (!values.target.protein.value) {
-      protein = null
-    }
-    if (!values.target.fat.value) {
-      fat = null
-    }
-    if (!values.target.carbo.value) {
-      carbo = null
-    }
-    if (!values.target.ingredients.value) { //何も入力していないとingredientsの値は""となっている
-      ingredients = []
-    }
-
-    db.collection("meals").doc(docId).set({
-        id: docId,
-        title: values.target.title.value,
+    const data = 
+    {
+      data: {
+        name: values.target.name.value,
         description: values.target.description.value,
-        time: time,
-        cost: cost,
-        calories: calories,
-        ingredients: ingredients,
-        protein: protein,
-        fat: fat,
-        carbo: carbo,
+        cook_time: values.target.time.value,
+        cost: values.target.cost.value,
+        calories: values.target.calories.value,
+        protein: values.target.protein.value,
+        fat: values.target.fat.value,
+        carbo: values.target.carbo.value,
         user_id: auth.currentUser.uid,
         image_url: image_url,
-        created_at: firebase.firestore.Timestamp.now()
-    });
+      }
+    }
+
+    var headers = {
+      "x-hasura-admin-secret": process.env.REACT_APP_HASURA_SECRET
+    };
+
+    axios.post(
+      process.env.REACT_APP_HASURA_ENDPOINT + "/create",
+      data,
+      {headers: headers}
+    )
+    .then(res => {
+      console.log(res.data)
+    })
+    .catch(e => {console.log(e)});
   }
 
   imageUpload = async () => {
@@ -134,21 +113,11 @@ class Form extends Component {
               console.log(url)
               this.post(this.state.values, url)
             })
-
-
-            
           }.bind(this)
         );
-
-        
-      
     } catch (error) {
       console.log("エラーキャッチ", error);
     }
-
-    
-
-    
   };
 
   render() {
@@ -166,7 +135,6 @@ class Form extends Component {
       outline: "none",
     };
     return (
-      
       <div className="form">
         <Modal
           open={this.state.isOpenModal}
@@ -177,7 +145,7 @@ class Form extends Component {
         <Box sx={style}>
         <form onSubmit={this.handleSubmit.bind(this)} class="post_form">
           <TextField
-            name="title" 
+            name="name" 
             InputProps={{
               style: {color: 'white'}
             }}
@@ -202,19 +170,6 @@ class Form extends Component {
             defaultValue="" 
             variant="outlined"
             rows={4}
-            margin="dense"
-            fullWidth
-            /><br/>
-          <TextField
-            name="ingredients" 
-            InputProps={{
-              style: {color: 'white'}
-            }}
-            type="text" 
-            InputLabelProps={{ style: {color: 'white'}}}
-            label="材料（スペースorカンマで区切る）" 
-            defaultValue="" 
-            variant="outlined"
             margin="dense"
             fullWidth
             /><br/>
