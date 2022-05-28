@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import MealList from '../meals/MealList'
-import Form from '../meals/Form';
+import Meal from './Meal';
+import Box from '@mui/material/Box';
+import Form from './Form';
+import Button from '@mui/material/Button';
 import axios from 'axios'
 import '../css/meal.css';
 
@@ -11,7 +13,7 @@ class MyMeal extends Component {
     const meals = []
     const dates = []
     const calories_params = 0
-
+    this.formRef = React.createRef();
     this.state = {
       meals: meals,
       dates: dates,
@@ -69,12 +71,32 @@ class MyMeal extends Component {
 
 
   render() {
+
+    const meals = this.state.meals.map( meal =>
+      <Meal
+        key={meal.id}
+        {...meal}
+        number={this.state.meals.length - (this.state.meals.indexOf(meal))}
+        created_at={meal.created_at}
+      />
+    )
     return (
       <div className="myMeal">
-        <Form/>
-        <MealList
-          meals={this.state.meals}
+        <Box>
+          <Button 
+            variant="contained"
+            onClick={() => this.formRef.current.handleOpen()}
+          >
+            NEW POST
+          </Button>
+        </Box>
+        
+        <Form
+          ref={this.formRef}
         />
+        <Box className="mealList" sx={{display: "flex", flexWrap: "wrap", width: "100%"}}>
+          {meals}
+        </Box>
       </div>
     );
   }
