@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import '../css/form.css';
+import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -17,12 +18,27 @@ class Form extends Component {
     super()
 
     this.state = {
+      isOpenModal: false,
       health_score: 1,
       cost_score: 1,
       ease_score: 1,
       values: [],
     }
     
+  }
+
+  handleOpen(){
+    console.log("modal opened")
+    this.setState({
+      isOpenModal: true
+    })
+  }
+
+  handleClose(){
+      console.log("modal closed")
+      this.setState({
+          isOpenModal: false
+      })
   }
 
   next = (snapshot) => {
@@ -35,6 +51,8 @@ class Form extends Component {
   error = (error) => {
     alert(error);
   };
+
+
 
   handleSubmit = (values) => {
     values.preventDefault();
@@ -134,8 +152,29 @@ class Form extends Component {
   };
 
   render() {
+    const style = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      maxHeight: "80%",
+      transform: 'translate(-50%, -50%)',
+      width: 500,
+      overflowY: "scroll",
+      bgcolor: '#111',
+      boxShadow: 24,
+      p: 4,
+      outline: "none",
+    };
     return (
+      
       <div className="form">
+        <Modal
+          open={this.state.isOpenModal}
+          onClose={this.handleClose.bind(this)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+        <Box sx={style}>
         <form onSubmit={this.handleSubmit.bind(this)} class="post_form">
           <TextField
             name="title" 
@@ -318,6 +357,8 @@ class Form extends Component {
           </Button>
         
         </form>
+        </Box>
+        </Modal>
       </div>
     )
   }

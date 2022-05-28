@@ -10,9 +10,7 @@ class App extends Component {
     return (
       <AuthProvider>
       <div className="app">
-        <h1>お料理ぽすと</h1>   
         <NavBar/>
-        
       </div>
       </AuthProvider>
     );

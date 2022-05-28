@@ -1,7 +1,8 @@
 import React  from 'react'
 import SignUp from './user/SignUp'
 import SignIn from './user/SignIn'
-import MyMeal from './user/MyMeal'
+import MyMeals from './meals/MyMeals'
+import Box from '@mui/material/Box';
 import MenuList from './menus/MenuList'
 import TopPage from './TopPage'
 import './css/App.css';
@@ -25,18 +26,20 @@ const NavBar = () => {
         <div className="navbar">
         <BrowserRouter>
           <nav class="nav-bar">
-            <Link to="/">Top</Link>
-            <Link to="/mymeal">My Post</Link>
-            <Link to="/menus">Menu</Link>
+            <h1>MEAL MEMO</h1>
+            <Link to="/mymeals">My Post</Link>
+            {/* <Link to="/menus">Menu</Link> */}
             <p class="signout" onClick={signOut}>Sign Out</p>
           </nav>
-          <Switch>
-            <Route exact path="/" component={TopPage} /> 
-            <Route exact path="/mymeal" component={MyMeal} />
-            <Route exact path="/menus" component={MenuList} />
-            <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/signin" component={SignIn} />  
-          </Switch>
+          <Box sx={{padding: "20px", width: "80%", margin: "0 auto"}}>
+            <Switch>
+              <Route exact path="/" component={TopPage} /> 
+              <Route exact path="/mymeals" component={MyMeals} />
+              {/* <Route exact path="/menus" component={MenuList} /> */}
+              <Route exact path="/signup" component={SignUp} />
+              <Route exact path="/signin" component={SignIn} />  
+            </Switch>
+          </Box>
         </BrowserRouter>
         </div>
     );
@@ -45,15 +48,17 @@ const NavBar = () => {
       <div className="navbar">
           <BrowserRouter>
           <nav class="nav-bar">
-            <Link to="/">Top</Link>
+            <h1>MEAL MEMO</h1>
             <Link to="/signup">Sign Up</Link>
             <Link to="/signin">Sign In</Link>
           </nav>
-          <Switch>
-            <Route exact path="/" component={TopPage} /> 
-            <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/signin" component={SignIn} />
-          </Switch>
+          <Box sx={{padding: "20px", width: "80%", margin: "0 auto"}}>
+            <Switch>
+              <Route exact path="/" component={TopPage} /> 
+              <Route exact path="/signup" component={SignUp} />
+              <Route exact path="/signin" component={SignIn} />
+            </Switch>
+          </Box>
         </BrowserRouter>
         
       </div>
