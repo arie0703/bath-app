@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import '../css/meal.css';
-import {db} from '../firebase'
-import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
 import Avatar from '@mui/material/Avatar';
 import SavingsIcon from '@mui/icons-material/Savings';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
@@ -13,8 +10,6 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { red } from '@mui/material/colors';
 import NoImageIcon from '../assets/no_image.jpeg';
 import MealDetailModal from './MealDetailModal';
@@ -31,9 +26,9 @@ class Meal extends Component {
   }
 
 
-  // openModal(){
-  //   this.modalRef.current.handleOpen();
-  // }
+  openModal(){
+    this.modalRef.current.handleOpen();
+  }
 
   render() {
     const className = 'meal'
@@ -65,6 +60,7 @@ class Meal extends Component {
       <Card 
         className={className}
         sx={{width: "280px"}}
+        onClick={() => this.openModal()}
         style={{backgroundColor: '#222', color: "#eee", padding: "4px", margin: "10px"}}
       >
         <CardHeader
@@ -103,10 +99,6 @@ class Meal extends Component {
             <WhatshotIcon sx={{color: "orange", fontSize: "21px", padding: "2px"}}></WhatshotIcon>
             <Typography variant="subtitle2">{caloriesValue}kcal</Typography>
           </Box>
-
-          
-
-          
         </Box>
 
         <Box sx={{display: "flex" ,paddingLeft: "6px"}}>
@@ -117,7 +109,7 @@ class Meal extends Component {
       </Card>
 
 
-      {/* <MealDetailModal
+      <MealDetailModal
             {...this.props}
             ref={this.modalRef}
             image_url={image_url}
@@ -128,7 +120,7 @@ class Meal extends Component {
             fat={fat}
             carbo={carbo}
           >
-      </MealDetailModal> */}
+      </MealDetailModal>
 
 
       </div>

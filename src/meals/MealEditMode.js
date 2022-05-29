@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../css/meal.css';
-import {db} from '../firebase'
+import axios from 'axios'
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -27,47 +27,39 @@ class MealEditMode extends Component {
 
     handleSubmit = (values) => {
         values.preventDefault();
-        this.post(values, this.props.id)
+        this.post(values)
         this.props.toggleEditMode()
     }
 
-    post = (values, docId) => {
-        let time = Number(values.target.time.value)
-        let cost = Number(values.target.cost.value)
-        let calories = Number(values.target.calories.value)
-        let protein = Number(values.target.protein.value)
-        let fat = Number(values.target.fat.value)
-        let carbo = Number(values.target.carbo.value)
-    
-        // Numberの中身がnullだと勝手に0になるので、null指定してあげる
-        if (!values.target.time.value) {
-          time = null
+    post = (values) => {
+        console.log(this.props.id)
+        const data = 
+        {
+            id: this.props.id,
+            data: {
+                name: values.target.name.value,
+                description: values.target.description.value,
+                cook_time: values.target.time.value,
+                cost: values.target.cost.value,
+                calories: values.target.calories.value,
+                protein: values.target.protein.value,
+                fat: values.target.fat.value,
+                carbo: values.target.carbo.value,
+            }
         }
-        if (!values.target.cost.value) {
-          cost = null
-        }
-        if (!values.target.calories.value) {
-          calories = null
-        }
-        if (!values.target.protein.value) {
-          protein = null
-        }
-        if (!values.target.fat.value) {
-          fat = null
-        }
-        if (!values.target.carbo.value) {
-          carbo = null
-        }
-        db.collection("meals").doc(docId).update({
-            title: values.target.title.value,
-            description: values.target.description.value,
-            time: time,
-            cost: cost,
-            calories: calories,
-            protein: protein,
-            fat: fat,
-            carbo: carbo,
-        });
+
+        var headers = {
+            "x-hasura-admin-secret": process.env.REACT_APP_HASURA_SECRET
+        };
+        axios.post(
+            process.env.REACT_APP_HASURA_ENDPOINT + "/update",
+            data,
+            {headers: headers}
+        )
+        .then(res => {
+            console.log(res.data)
+        })
+        .catch(e => {console.log(e.response.data.error)});
     }
 
 
@@ -79,13 +71,13 @@ class MealEditMode extends Component {
                 <Box sx={{display: "flex", margin: "5px"}}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         <TextField
-                            name="title" 
+                            name="name" 
                             InputProps={{
                             style: {color: 'white'}
                             }}
                             type="text" 
                             InputLabelProps={{ style: {color: 'white'}}}
-                            defaultValue={this.props.title}
+                            defaultValue={this.props.name}
                             variant="outlined"
                             margin="dense"
                             size="small"
