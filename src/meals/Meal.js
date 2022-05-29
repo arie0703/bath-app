@@ -119,6 +119,7 @@ class Meal extends Component {
             protein={protein}
             fat={fat}
             carbo={carbo}
+            getData={this.props.getData.bind(this)}
           >
       </MealDetailModal>
 

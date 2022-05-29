@@ -44,6 +44,7 @@ class MealDetailModal extends Component {
         )
         .then(res => {
             console.log(res.data)
+            this.props.getData()
         })
         .catch(e => {console.log(e.response.data.error)});
         this.handleClose()
@@ -176,6 +177,7 @@ class MealDetailModal extends Component {
                         protein={this.props.protein}
                         fat={this.props.fat}
                         carbo={this.props.carbo}
+                        getData={this.props.getData.bind(this)}
                     ></MealEditMode>
 
 
