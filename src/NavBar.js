@@ -3,8 +3,6 @@ import SignUp from './user/SignUp'
 import SignIn from './user/SignIn'
 import MyMeals from './meals/MyMeals'
 import Box from '@mui/material/Box';
-import MenuList from './menus/MenuList'
-import TopPage from './TopPage'
 import './css/App.css';
 import { useAuthContext } from './AuthContext';
 import { Link, BrowserRouter, Route, Switch } from "react-router-dom";
@@ -27,15 +25,13 @@ const NavBar = () => {
         <BrowserRouter>
           <nav class="nav-bar">
             <h1>MEAL MEMO</h1>
-            <Link to="/mymeals">My Post</Link>
+            <Link to="/">My Post</Link>
             {/* <Link to="/menus">Menu</Link> */}
             <p class="signout" onClick={signOut}>Sign Out</p>
           </nav>
           <Box sx={{padding: "20px", width: "80%", margin: "0 auto"}}>
             <Switch>
-              <Route exact path="/" component={TopPage} /> 
-              <Route exact path="/mymeals" component={MyMeals} />
-              {/* <Route exact path="/menus" component={MenuList} /> */}
+              <Route exact path="/" component={MyMeals} /> 
               <Route exact path="/signup" component={SignUp} />
               <Route exact path="/signin" component={SignIn} />  
             </Switch>
@@ -54,7 +50,7 @@ const NavBar = () => {
           </nav>
           <Box sx={{padding: "20px", width: "80%", margin: "0 auto"}}>
             <Switch>
-              <Route exact path="/" component={TopPage} /> 
+              <Route exact path="/" component={SignIn} /> 
               <Route exact path="/signup" component={SignUp} />
               <Route exact path="/signin" component={SignIn} />
             </Switch>

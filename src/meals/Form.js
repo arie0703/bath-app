@@ -20,10 +20,8 @@ class Form extends Component {
 
     this.state = {
       isOpenModal: false,
-      health_score: 1,
-      cost_score: 1,
-      ease_score: 1,
       values: [],
+      err_msg: "",
     }
   }
 
@@ -94,8 +92,17 @@ class Form extends Component {
     )
     .then(res => {
       console.log(res.data)
+      this.props.getData()
+      this.setState({
+        isOpenModal: false
+      })
     })
-    .catch(e => {console.log(e)});
+    .catch(e => {
+      console.log(e)
+      this.setState({
+        err_msg: "投稿に失敗しました"
+      })
+    });
   }
 
   imageUpload = async () => {

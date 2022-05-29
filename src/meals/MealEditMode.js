@@ -58,6 +58,7 @@ class MealEditMode extends Component {
         )
         .then(res => {
             console.log(res.data)
+            this.props.getData()
         })
         .catch(e => {console.log(e.response.data.error)});
     }
