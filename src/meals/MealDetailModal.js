@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../css/meal.css';
-import {db} from '../firebase'
+import axios from 'axios'
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -28,12 +28,25 @@ class MealDetailModal extends Component {
     
     }
 
-    deleteMeal(docId) {
-        db.collection("meals").doc(docId).delete().then(() => {
-            console.log("Document successfully deleted!");
-        }).catch((error) => {
-            console.error("Error removing document: ", error);
-        });
+    deleteMeal() {
+        const data = 
+        {
+            id: this.props.id,
+        }
+
+        var headers = {
+            "x-hasura-admin-secret": process.env.REACT_APP_HASURA_SECRET
+        };
+        axios.post(
+            process.env.REACT_APP_HASURA_ENDPOINT + "/delete",
+            data,
+            {headers: headers}
+        )
+        .then(res => {
+            console.log(res.data)
+        })
+        .catch(e => {console.log(e.response.data.error)});
+        this.handleClose()
     }
 
     handleOpen(){
@@ -74,12 +87,6 @@ class MealDetailModal extends Component {
         const timeValue = this.props.timeValue;
         const costValue = this.props.costValue;
         const caloriesValue = this.props.caloriesValue;
-        const protein = (this.props.protein !== null) ? this.props.protein : "?";
-        const fat = (this.props.fat !== null) ? this.props.fat : "?";
-        const carbo = (this.props.carbo !== null) ? this.props.carbo : "?";
-
-
-
         
 
         return (
@@ -94,7 +101,7 @@ class MealDetailModal extends Component {
                     <Box sx={{display: this.state.isEditMode ? "none" : "block" }}>
                         <Box sx={{display: "flex", margin: "5px"}}>
                             <Typography id="modal-modal-title" variant="h6" component="h2">
-                            {this.props.title}
+                            {this.props.name}
                             </Typography>
                             <IconButton 
                             aria-label="delete" 
@@ -146,7 +153,7 @@ class MealDetailModal extends Component {
                             <Box sx={{display: "flex"}}>
                                 <Box sx={{display: "flex", marginBottom: "5px"}}>
                                 <BarChartIcon sx={{color: "grey", fontSize: "21px", padding: "2px"}}></BarChartIcon>
-                                <Typography variant="subtitle2" sx={{marginRight: "5px"}}>P: {protein} F: {fat} C: {carbo}</Typography>
+                                <Typography variant="subtitle2" sx={{marginRight: "5px"}}>P: {this.props.protein} F: {this.props.fat} C: {this.props.carbo}</Typography>
                                 </Box>
                             </Box>
                             </div>
@@ -166,9 +173,9 @@ class MealDetailModal extends Component {
                         timeValue={timeValue}
                         costValue={costValue}
                         caloriesValue={caloriesValue}
-                        protein={protein}
-                        fat={fat}
-                        carbo={carbo}
+                        protein={this.props.protein}
+                        fat={this.props.fat}
+                        carbo={this.props.carbo}
                     ></MealEditMode>
 
 
