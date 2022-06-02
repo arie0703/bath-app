@@ -22,6 +22,10 @@ class Form extends Component {
       isOpenModal: false,
       values: [],
       err_msg: "",
+      calorie_value: null,
+      protein_value: null,
+      fat_value: null,
+      carbo_value: null
     }
   }
 
@@ -94,7 +98,11 @@ class Form extends Component {
       console.log(res.data)
       this.props.getData()
       this.setState({
-        isOpenModal: false
+        isOpenModal: false,
+        calorie_value: null,
+        protein_value: null,
+        fat_value: null,
+        carbo_value: null,
       })
     })
     .catch(e => {
@@ -126,6 +134,12 @@ class Form extends Component {
       console.log("エラーキャッチ", error);
     }
   };
+
+  calorieCalculate() {
+    this.setState({
+      calorie_value: ((Number(this.state.carbo_value) + Number(this.state.protein_value)) * 4) + (Number(this.state.fat_value) * 9)
+    })
+  }
 
   render() {
     const style = {
@@ -240,35 +254,19 @@ class Form extends Component {
             margin="dense"
             fullWidth
             /><br/>
-          <TextField 
-            name="calories" 
-            type="number" 
-            InputLabelProps={{
-              style: { color: '#fff' },
-            }}
-            InputProps={{
-              style: {color: 'white'},
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography style={{color: "white"}}>kcal</Typography>
-                </InputAdornment>
-              ),
-            }}
-            label="カロリー" 
-            onChange={(event) => // マイナスの入力があったら0にする
-              event.target.value < 0
-                  ? (event.target.value = 0)
-                  : event.target.value
-            }
-            defaultValue={null} 
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            /><br/> 
 
+          <p>栄養データ</p>
           <Box style={{display: "flex"}}>
             <TextField
             name="protein" 
+            value={this.state.protein_value}
+            onChange={(event) => 
+              {
+                this.setState({
+                  protein_value: event.target.value
+                })
+              }
+            }
             InputProps={{
               style: {color: 'white'}
             }}
@@ -285,6 +283,14 @@ class Form extends Component {
             InputProps={{
               style: {color: 'white'}
             }}
+            value={this.state.fat_value}
+            onChange={(event) => 
+              {
+                this.setState({
+                  fat_value: event.target.value
+                })
+              }
+            }
             type="number" 
             InputLabelProps={{ style: {color: 'white'}}}
             label="F"
@@ -295,6 +301,14 @@ class Form extends Component {
             />
             <TextField
             name="carbo"
+            value={this.state.carbo_value}
+            onChange={(event) => 
+              {
+                this.setState({
+                  carbo_value: event.target.value
+                })
+              }
+            }
             InputProps={{
               style: {color: 'white'}
             }}
@@ -307,8 +321,39 @@ class Form extends Component {
             fullWidth
             />
           </Box>
-          
-          
+          <TextField 
+            name="calories" 
+            type="number" 
+            value={this.state.calorie_value}
+            onChange={(event) => 
+              {
+                event.target.value < 0
+                  ? (event.target.value = 0)
+                  : this.setState({
+                      calorie_value: event.target.value
+                    })
+              }
+            }
+            InputLabelProps={{
+              style: { color: '#fff' },
+            }}
+            InputProps={{
+              style: {color: 'white'},
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Typography style={{color: "white"}}>kcal</Typography>
+                </InputAdornment>
+              ),
+            }}
+            variant="outlined"
+            margin="dense"
+            fullWidth
+            />
+            <Button
+              onClick={() => this.calorieCalculate()}
+            >
+              PFCからカロリーを自動計算
+            </Button>
 
           <ImageUploader image_info={this.state.image}></ImageUploader>
           <Button 
@@ -317,7 +362,6 @@ class Form extends Component {
           >
             POST
           </Button>
-        
         </form>
         </Box>
         </Modal>
