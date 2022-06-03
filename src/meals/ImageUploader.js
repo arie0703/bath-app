@@ -5,6 +5,7 @@ import { Typography } from "@material-ui/core";
 import '../css/form.css';
 import { useDropzone } from "react-dropzone";
 import {uploadedImage, setImage} from '../UploadedImage';
+import Button from '@mui/material/Button';
 
 
 const ImageUploader = () => {
@@ -57,26 +58,20 @@ const ImageUploader = () => {
   };
 
   return (
-    <Card>
-      <CardContent>
-        <Typography variant="h6">Upload your image</Typography>
-        <p>File should be Jpeg, Png,...</p>
-        <div {...getRootProps()}>
-          <input name="image" {...getInputProps()} />
-          {myFiles.length === 0 ? (
-            <p>Drag&Drop your images here</p>
-          ) : (
-            <div class="image_uploader">
-              {myFiles.map((file) => (
-                <React.Fragment key={file.name}>
-                  <img src={src} />
-                </React.Fragment>
-              ))}
-            </div>
-          )}
+    <div {...getRootProps()}>
+      <input name="image" {...getInputProps()} />
+      {myFiles.length === 0 ? (
+        <Button>アップロード</Button>
+      ) : (
+        <div class="image_uploader">
+          {myFiles.map((file) => (
+            <React.Fragment key={file.name}>
+              <img src={src} />
+            </React.Fragment>
+          ))}
         </div>
-      </CardContent>
-    </Card>
+      )}
+    </div>
   );
 };
 export default ImageUploader;
