@@ -6,12 +6,15 @@ import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import SavingsIcon from '@mui/icons-material/Savings';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Typography from '@mui/material/Typography';
 import ImageUploader from './ImageUploader.js'
 import firebase, { storage, auth, db } from '../firebase';
 import {uploadedImage} from '../UploadedImage';
 import Box from '@mui/material/Box';
 import axios from 'axios'
+import notification from '../SlackNotification'
 
 class Form extends Component {
 
@@ -25,7 +28,8 @@ class Form extends Component {
       calorie_value: null,
       protein_value: null,
       fat_value: null,
-      carbo_value: null
+      carbo_value: null,
+      isOpenDetail: false,
     }
   }
 
@@ -39,7 +43,11 @@ class Form extends Component {
   handleClose(){
       console.log("modal closed")
       this.setState({
-          isOpenModal: false
+          isOpenModal: false,
+          calorie_value: null,
+          protein_value: null,
+          fat_value: null,
+          carbo_value: null
       })
   }
 
@@ -84,7 +92,6 @@ class Form extends Component {
         image_url: image_url,
       }
     }
-
     var headers = {
       "x-hasura-admin-secret": process.env.REACT_APP_HASURA_SECRET
     };
@@ -104,6 +111,8 @@ class Form extends Component {
         fat_value: null,
         carbo_value: null,
       })
+
+      notification(data.data.name, data.data.image_url)
     })
     .catch(e => {
       console.log(e)
@@ -165,6 +174,10 @@ class Form extends Component {
         >
         <Box sx={style}>
         <form onSubmit={this.handleSubmit.bind(this)} class="post_form">
+          <Box sx={{display: "flex", alignItems: "center"}}>
+            <label class="bold">料理名</label>
+            <label class="required">必須</label>
+          </Box>
           <TextField
             name="name" 
             InputProps={{
@@ -172,12 +185,15 @@ class Form extends Component {
             }}
             type="text" 
             InputLabelProps={{ style: {color: 'white'}}}
-            label="料理名" 
-            defaultValue="" 
             variant="outlined"
             margin="dense"
             fullWidth
             /><br/>
+
+          <Box sx={{display: "flex", alignItems: "center", backgrondColor: "#444"}}>
+            <label>簡単な概要</label>
+            <label class="optional">任意</label>
+          </Box>
           <TextField 
             name="description" 
             multiline type="text" 
@@ -187,175 +203,185 @@ class Form extends Component {
             InputProps={{
               style: {color: 'white'}
             }}
-            label="簡単な概要" 
-            defaultValue="" 
             variant="outlined"
             rows={4}
             margin="dense"
             fullWidth
             /><br/>
-          <TextField 
-            name="cost" 
-            type="number" 
-            InputLabelProps={{
-              style: { color: '#fff' },
-            }}
-            InputProps={{
-              style: {color: 'white'},
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SavingsIcon sx={{color: "gold"}}/>
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography style={{color: "white"}}>円</Typography>
-                </InputAdornment>
-              ),
-            }}
-            label="費用（1人前）" 
-            defaultValue={null}
-            onChange={(event) => // マイナスの入力があったら0にする
-              event.target.value < 0
-                  ? (event.target.value = 0)
-                  : event.target.value
-            }
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            /><br/>
-          <TextField 
-            name="time" 
-            type="number" 
-            InputLabelProps={{
-              style: { color: '#fff' },
-            }}
-            InputProps={{
-              style: {color: 'white'},
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AccessTimeIcon sx={{color: "pink"}}/>
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography style={{color: "white"}}>分</Typography>
-                </InputAdornment>
-              ),
-            }}
-            label="調理時間" 
-            onChange={(event) => // マイナスの入力があったら0にする
-              event.target.value < 0
-                  ? (event.target.value = 0)
-                  : event.target.value
-            }
-            defaultValue={null} 
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            /><br/>
 
-          <p>栄養データ</p>
-          <Box style={{display: "flex"}}>
-            <TextField
-            name="protein" 
-            value={this.state.protein_value}
-            onChange={(event) => 
-              {
-                this.setState({
-                  protein_value: event.target.value
-                })
-              }
-            }
-            InputProps={{
-              style: {color: 'white'}
-            }}
-            type="number" 
-            InputLabelProps={{ style: {color: 'white'}}}
-            label="P" 
-            defaultValue="" 
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            />
-            <TextField
-            name="fat" 
-            InputProps={{
-              style: {color: 'white'}
-            }}
-            value={this.state.fat_value}
-            onChange={(event) => 
-              {
-                this.setState({
-                  fat_value: event.target.value
-                })
-              }
-            }
-            type="number" 
-            InputLabelProps={{ style: {color: 'white'}}}
-            label="F"
-            defaultValue=""
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            />
-            <TextField
-            name="carbo"
-            value={this.state.carbo_value}
-            onChange={(event) => 
-              {
-                this.setState({
-                  carbo_value: event.target.value
-                })
-              }
-            }
-            InputProps={{
-              style: {color: 'white'}
-            }}
-            type="number"
-            InputLabelProps={{ style: {color: 'white'}}}
-            label="C" 
-            defaultValue="" 
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            />
-          </Box>
-          <TextField 
-            name="calories" 
-            type="number" 
-            value={this.state.calorie_value}
-            onChange={(event) => 
-              {
+          <Button onClick={() => {this.setState({isOpenDetail: !this.state.isOpenDetail})}} endIcon={this.state.isOpenDetail ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}>
+            {this.state.isOpenDetail ? "閉じる" : "詳細"} 
+          </Button>
+          {this.state.isOpenDetail}
+          <Box className={`collapse ${this.state.isOpenDetail ? 'visible' : 'hidden'}`}>
+            <TextField 
+              name="cost" 
+              type="number" 
+              InputLabelProps={{
+                style: { color: '#fff' },
+              }}
+              InputProps={{
+                style: {color: 'white'},
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SavingsIcon sx={{color: "gold"}}/>
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Typography style={{color: "white"}}>円</Typography>
+                  </InputAdornment>
+                ),
+              }}
+              label="費用（1人前）" 
+              defaultValue={null}
+              onChange={(event) => // マイナスの入力があったら0にする
                 event.target.value < 0
-                  ? (event.target.value = 0)
-                  : this.setState({
-                      calorie_value: event.target.value
-                    })
+                    ? (event.target.value = 0)
+                    : event.target.value
               }
-            }
-            InputLabelProps={{
-              style: { color: '#fff' },
-            }}
-            InputProps={{
-              style: {color: 'white'},
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Typography style={{color: "white"}}>kcal</Typography>
-                </InputAdornment>
-              ),
-            }}
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            />
-            <Button
-              onClick={() => this.calorieCalculate()}
-            >
-              PFCからカロリーを自動計算
-            </Button>
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              /><br/>
+            <TextField 
+              name="time" 
+              type="number" 
+              InputLabelProps={{
+                style: { color: '#fff' },
+              }}
+              InputProps={{
+                style: {color: 'white'},
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccessTimeIcon sx={{color: "pink"}}/>
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Typography style={{color: "white"}}>分</Typography>
+                  </InputAdornment>
+                ),
+              }}
+              label="調理時間" 
+              onChange={(event) => // マイナスの入力があったら0にする
+                event.target.value < 0
+                    ? (event.target.value = 0)
+                    : event.target.value
+              }
+              defaultValue={null} 
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              /><br/>
 
-          <ImageUploader image_info={this.state.image}></ImageUploader>
+            <p>栄養データ</p>
+            <Box style={{display: "flex"}}>
+              <TextField
+              name="protein" 
+              value={this.state.protein_value}
+              onChange={(event) => 
+                {
+                  this.setState({
+                    protein_value: event.target.value
+                  })
+                }
+              }
+              InputProps={{
+                style: {color: 'white'}
+              }}
+              type="number" 
+              InputLabelProps={{ style: {color: 'white'}}}
+              label="P" 
+              defaultValue="" 
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              />
+              <TextField
+              name="fat" 
+              InputProps={{
+                style: {color: 'white'}
+              }}
+              value={this.state.fat_value}
+              onChange={(event) => 
+                {
+                  this.setState({
+                    fat_value: event.target.value
+                  })
+                }
+              }
+              type="number" 
+              InputLabelProps={{ style: {color: 'white'}}}
+              label="F"
+              defaultValue=""
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              />
+              <TextField
+              name="carbo"
+              value={this.state.carbo_value}
+              onChange={(event) => 
+                {
+                  this.setState({
+                    carbo_value: event.target.value
+                  })
+                }
+              }
+              InputProps={{
+                style: {color: 'white'}
+              }}
+              type="number"
+              InputLabelProps={{ style: {color: 'white'}}}
+              label="C" 
+              defaultValue="" 
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              />
+            </Box>
+            <TextField 
+              name="calories" 
+              type="number" 
+              value={this.state.calorie_value}
+              onChange={(event) => 
+                {
+                  event.target.value < 0
+                    ? (event.target.value = 0)
+                    : this.setState({
+                        calorie_value: event.target.value
+                      })
+                }
+              }
+              InputLabelProps={{
+                style: { color: '#fff' },
+              }}
+              InputProps={{
+                style: {color: 'white'},
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Typography style={{color: "white"}}>kcal</Typography>
+                  </InputAdornment>
+                ),
+              }}
+              variant="outlined"
+              margin="dense"
+              fullWidth
+              />
+              <Button
+                onClick={() => this.calorieCalculate()}
+              >
+                PFCからカロリーを自動計算
+              </Button>
+          </Box>
+          <Box sx={{display: "flex", alignItems: "center", backgrondColor: "#444"}}>
+            <label>画像</label>
+            <label class="optional">任意</label>
+          </Box>
+          <Box sx={{padding: "10px", backgroundColor: "#222", borderRadius: "8px", margin: "10px 0px"}}>
+            <ImageUploader image_info={this.state.image}></ImageUploader>
+          </Box>
           <Button 
             type="submit"
             variant="contained"

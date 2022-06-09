@@ -29,6 +29,33 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0; 
 } 
 
+.collapse {
+    transition: height 300ms;
+    overflow: hidden;
+}
+
+.visible {
+    height: 380px;
+}
+
+.hidden {
+    height: 0;
+}
+
+label.required {
+    margin-left: 10px;
+    padding: 4px 8px;
+    border-radius: 25px;
+    background-color: firebrick;
+}
+
+label.optional {
+    margin-left: 10px;
+    padding: 4px 8px;
+    border-radius: 25px;
+    background-color: #444;
+}
+
 /* importantはダークモードが適切に実装できたら消す */
 
 fieldset {
