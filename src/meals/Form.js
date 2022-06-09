@@ -14,6 +14,7 @@ import firebase, { storage, auth, db } from '../firebase';
 import {uploadedImage} from '../UploadedImage';
 import Box from '@mui/material/Box';
 import axios from 'axios'
+import notification from '../SlackNotification'
 
 class Form extends Component {
 
@@ -91,7 +92,6 @@ class Form extends Component {
         image_url: image_url,
       }
     }
-
     var headers = {
       "x-hasura-admin-secret": process.env.REACT_APP_HASURA_SECRET
     };
@@ -111,6 +111,8 @@ class Form extends Component {
         fat_value: null,
         carbo_value: null,
       })
+
+      notification(data.data.name, data.data.image_url)
     })
     .catch(e => {
       console.log(e)
