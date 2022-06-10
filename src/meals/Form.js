@@ -82,12 +82,12 @@ class Form extends Component {
       data: {
         name: values.target.name.value,
         description: values.target.description.value,
-        cook_time: values.target.time.value,
-        cost: values.target.cost.value,
-        calories: values.target.calories.value,
-        protein: values.target.protein.value,
-        fat: values.target.fat.value,
-        carbo: values.target.carbo.value,
+        cook_time: values.target.time.value ? values.target.time.value : null,
+        cost: values.target.cost.value ? values.target.cost.value : null,
+        calories: values.target.calories.value ? values.target.calories.value : null,
+        protein: values.target.protein.value ? values.target.protein.value : null,
+        fat: values.target.fat.value ? values.target.fat.value : null,
+        carbo: values.target.carbo.value ? values.target.carbo.value : null,
         user_id: auth.currentUser.uid,
         image_url: image_url,
       }
