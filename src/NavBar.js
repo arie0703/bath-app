@@ -7,15 +7,17 @@ import './css/App.css';
 import { useAuthContext } from './AuthContext';
 import { Link, BrowserRouter, Route, Switch } from "react-router-dom";
 import { auth } from './firebase';
+import { setSessionUser, getSessionUser } from './user/Session';
+
 const NavBar = () => {
 
 
-  const { user } = useAuthContext();
+  const user = getSessionUser();
+  console.log(user)
 
   const signOut = () => {
-    auth.signOut().then(()=>{
-      console.log("ログアウトしました");
-    })
+    sessionStorage.clear()
+    window.location.href = process.env.REACT_APP_SLACK_REDIRECT_URI
   }
 
 
@@ -26,7 +28,6 @@ const NavBar = () => {
           <nav class="nav-bar">
             <h1>MEAL MEMO</h1>
             <Link to="/">My Post</Link>
-            {/* <Link to="/menus">Menu</Link> */}
             <p class="signout" onClick={signOut}>Sign Out</p>
           </nav>
           <Box sx={{padding: "20px", width: "80%", margin: "0 auto"}}>

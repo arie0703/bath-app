@@ -1,69 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../css/form.css';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import { auth } from '../firebase';
-import { useAuthContext } from '../AuthContext';
 import { Redirect } from 'react-router-dom';
-
+import { getUser } from './SlackAuth';
+import { setSessionUser, getSessionUser } from './Session';
 
 const SignIn = () => {
 
-  
-  const { user } = useAuthContext();
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [hasError, setHasError] = useState(false)
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const { email, password } = event.target.elements;
-    auth.signInWithEmailAndPassword(email.value, password.value)
-    .then((userCredential) => {
-        console.log("ログイン成功");
-    })
-  };
+  useEffect(() => {
+    (async () => {
+      const queryPrams = new URLSearchParams(window.location.search);
+      const token = queryPrams.get('code');
 
-  if (user) {
+      if(token) {
+        try {
+          const response = await getUser()
+          setSessionUser(response.data.access_token, response.data.user_id)
+          window.location.href = process.env.REACT_APP_SLACK_REDIRECT_URI
+          console.log(response)
+        } catch (err) {
+          console.log(err)
+        }
+        const slackData = getUser();
+        console.log(slackData);
+      } else {
+        if (getSessionUser()) {
+            setIsAuthenticated(true)
+            console.log(getSessionUser())
+        } else {
+            setHasError(true)
+        }
+      }
+    })()
+  },[]);
+
+  if (isAuthenticated) {
     return <Redirect to="/mypost" />;
   } else {
     return (
       <div className="signin">
-        <form onSubmit={handleSubmit} class="post_form">
-          <TextField
-            name="email" 
-            InputProps={{
-              style: {color: 'white'}
-            }}
-            type="text" 
-            InputLabelProps={{ style: {color: 'white'}}}
-            label="email" 
-            defaultValue="" 
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            /><br/>
-          <TextField
-            name="password" 
-            InputProps={{
-              style: {color: 'white'}
-            }}
-            type="password" 
-            InputLabelProps={{ style: {color: 'white'}}}
-            label="password" 
-            defaultValue="" 
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            /><br/>
-          <Button 
-            type="submit"
-            variant="contained"
-          >
-            SIGN IN
-          </Button>
-        </form>
+        <a href={`https://slack.com/oauth/authorize?scope=team:read,users:read&client_id=${process.env.REACT_APP_SLACK_CLIENT_ID}&state=${window.location.href}`}><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" /></a>
       </div>
     )
   }
-  
 }
 
 
