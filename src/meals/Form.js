@@ -10,11 +10,12 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Typography from '@mui/material/Typography';
 import ImageUploader from './ImageUploader.js'
-import firebase, { storage, auth, db } from '../firebase';
+import firebase, { storage } from '../firebase';
 import {uploadedImage} from '../UploadedImage';
 import Box from '@mui/material/Box';
 import axios from 'axios'
 import notification from '../SlackNotification'
+import { getSessionUser } from '../user/Session';
 
 class Form extends Component {
 
@@ -88,7 +89,7 @@ class Form extends Component {
         protein: values.target.protein.value ? values.target.protein.value : null,
         fat: values.target.fat.value ? values.target.fat.value : null,
         carbo: values.target.carbo.value ? values.target.carbo.value : null,
-        user_id: auth.currentUser.uid,
+        user_id: getSessionUser().user_id,
         image_url: image_url,
       }
     }

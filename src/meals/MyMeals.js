@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import axios from 'axios'
 import '../css/meal.css';
+import { getUserInfo } from '../user/SlackUserInfo';
 
 class MyMeal extends Component {
 
@@ -45,6 +46,8 @@ class MyMeal extends Component {
   componentDidMount = async () => {
     //mount時に読み込む
     await this.getData();
+    const res = await getUserInfo("U03B9GTE4LW");
+    console.log(res)
   }
 
   render() {
