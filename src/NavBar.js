@@ -4,16 +4,13 @@ import SignIn from './user/SignIn'
 import MyMeals from './meals/MyMeals'
 import Box from '@mui/material/Box';
 import './css/App.css';
-import { useAuthContext } from './AuthContext';
 import { Link, BrowserRouter, Route, Switch } from "react-router-dom";
-import { auth } from './firebase';
-import { setSessionUser, getSessionUser } from './user/Session';
+import { getSessionUser } from './user/Session';
 
 const NavBar = () => {
 
 
   const user = getSessionUser();
-  console.log(user)
 
   const signOut = () => {
     sessionStorage.clear()
@@ -57,11 +54,9 @@ const NavBar = () => {
             </Switch>
           </Box>
         </BrowserRouter>
-        
       </div>
     )
   }
-  
 }
 
 

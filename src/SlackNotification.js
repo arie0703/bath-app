@@ -16,7 +16,7 @@ const notification = (meal_name, image_url) => {
     }
 
     axios.post(
-        process.env.REACT_APP_SLACK_URL,
+        process.env.REACT_APP_SLACK_URL_TEST,
         JSON.stringify(data),
         // corsエラー回避
         {
