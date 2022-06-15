@@ -1,10 +1,18 @@
 import axios from 'axios'
 
 export const getUserInfo = (user_id) => {
-    return axios.get(
-        `https://slack.com/api/users.info&user=${user_id}&pretty=1`, 
+
+    const params = new URLSearchParams(window.location.search)
+    params.append('token', process.env.REACT_APP_SLACK_TOKEN)
+    params.append('user', user_id)
+
+    return axios.post(
+        'https://slack.com/api/users.info', 
+        params,
         {
-            headers: {'Content-type': 'application/x-www-form-urlencoded', 'Authorization': 'Bearer ' + `${process.env.REACT_APP_TOKEN}`}
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            }
         }
     )
 }
