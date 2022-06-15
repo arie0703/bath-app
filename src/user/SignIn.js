@@ -3,11 +3,15 @@ import '../css/form.css';
 import { Redirect } from 'react-router-dom';
 import { getUser } from './SlackAuth';
 import { setSessionUser, getSessionUser } from './Session';
+import axios from 'axios'
+import { userExists } from './UserExists';
 
 const SignIn = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [hasError, setHasError] = useState(false)
+  const [isUserExists, setIsUserExists] = useState(false)
+
 
   useEffect(() => {
     (async () => {
@@ -27,8 +31,12 @@ const SignIn = () => {
         console.log(slackData);
       } else {
         if (getSessionUser()) {
-            setIsAuthenticated(true)
-            console.log(getSessionUser())
+            const res = await userExists(getSessionUser().user_id);
+            if (res.data.users) {
+              setIsUserExists(true)
+              setIsAuthenticated(true)
+              console.log(isUserExists, isAuthenticated)
+            }
         } else {
             setHasError(true)
         }
@@ -37,7 +45,12 @@ const SignIn = () => {
   },[]);
 
   if (isAuthenticated) {
-    return <Redirect to="/mypost" />;
+    console.log('isUserExists', isUserExists);
+
+    if (!isUserExists) {
+      return <Redirect to="/signup" />;
+    }
+    return <Redirect to="/" />;
   } else {
     return (
       <div className="signin">

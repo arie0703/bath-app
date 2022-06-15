@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import axios from 'axios'
 import '../css/meal.css';
 import { getUserInfo } from '../user/SlackUserInfo';
+import { getSessionUser } from '../user/Session';
 
 class MyMeal extends Component {
 
@@ -29,7 +30,7 @@ class MyMeal extends Component {
     };
 
     axios({
-      url: process.env.REACT_APP_HASURA_ENDPOINT,
+      url: process.env.REACT_APP_HASURA_ENDPOINT + 'meals',
       method: 'GET',
       headers: headers,
     })
